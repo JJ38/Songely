@@ -11,21 +11,20 @@
 <x-layout :links="[
     'https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=play_arrow,replay,skip_previous']">
 
-    {{-- <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/7qiZfU4dY1lWllzX7mPBI3?utm_source=generator" width="0" height="0" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe> --}}
-    {{-- <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/7qiZfU4dY1lWllzX7mPBI3?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe> --}}
-
-    <div id="embed-iframe"></div>
+    {{-- <div id="embed-iframe"></div>
     <script src="https://open.spotify.com/embed/iframe-api/v1" async>
-    </script>
+    </script> --}}
 
-
+    <iframe id="sc-widget" class="hidden" src="https://w.soundcloud.com/player/?url=https://soundcloud.com/edsheeran/shape-of-you" width="100" height="100" scrolling="no" frameborder="no" allow="autoplay"></iframe>
+    <script src="https://w.soundcloud.com/player/api.js" type="text/javascript"></script>
+    
     <div class="relative">
         
         <div class=" w-[320px] h-[390px] bg-white rounded-xl mx-auto pt-8 border drop-shadow-xl/25">
 
             <div class="w-[220px] m-auto">
                 
-                <div id="album_image_container" class="h-[220px] overflow-hidden rounded-xl blur-[24px] transition duration-900">
+                <div id="album_image_container" class="h-[220px] overflow-hidden rounded-xl blur-[24px] transition duration-833">
                     <img src="{{ $albumImageLink }}" 
                     alt="{{ Vite::asset('resources/images/album_cover_placeholder.png') }}"
                     >
@@ -39,7 +38,7 @@
         
                     <x-circle-button id="play_pause_button" class="w-[70px] h-[70px] hover:bg-pink hover:fill-white hover:cursor-pointer duration-200">
                         <svg id="play_icon" class="h-6 w-6 my-auto pl-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80L0 432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg>
-                        <svg id="pause_icon" class="hidden h-6 w-6 my-auto pl-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M48 64C21.5 64 0 85.5 0 112L0 400c0 26.5 21.5 48 48 48l32 0c26.5 0 48-21.5 48-48l0-288c0-26.5-21.5-48-48-48L48 64zm192 0c-26.5 0-48 21.5-48 48l0 288c0 26.5 21.5 48 48 48l32 0c26.5 0 48-21.5 48-48l0-288c0-26.5-21.5-48-48-48l-32 0z"/></svg>
+                        <svg id="pause_icon" class="hidden h-6 w-6 my-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M48 64C21.5 64 0 85.5 0 112L0 400c0 26.5 21.5 48 48 48l32 0c26.5 0 48-21.5 48-48l0-288c0-26.5-21.5-48-48-48L48 64zm192 0c-26.5 0-48 21.5-48 48l0 288c0 26.5 21.5 48 48 48l32 0c26.5 0 48-21.5 48-48l0-288c0-26.5-21.5-48-48-48l-32 0z"/></svg>
                     </x-circle-button>
                     
                     <x-circle-button id="locked_button" class="w-[50px] h-[50px] hover:bg-pink hover:fill-white hover:cursor-pointer duration-200">
@@ -70,8 +69,6 @@
         <div id="played_bar" class="bg-gray-600 h-[5px] w-[0px] absolute"></div>
 
         <x-circle-button id="slider_button" class="w-[27px] h-[27px] top-[2px] translate-x-[-50%] translate-y-[-50%] absolute hover:w-[32px] hover:h-[32px] hover:cursor-pointer" style="left: 0px"></x-circle-button>
-        {{-- <input type="range" min="1" max="100" value="50" class="absolute translate-y-[-50%]" id="myRange"> --}}
-
 
     </div>
 

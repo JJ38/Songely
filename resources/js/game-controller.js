@@ -17,7 +17,7 @@ const albumImageContainer = document.getElementById('album_image_container');
 const startingBlurAmount = 24; //px
 const lengthOfBlurMilliseconds = 20000;
 const lengthOfSliderBar = 900;
-const songLengthMs = 30000;
+const songLengthMs = 5000;
 
 const scaleFactor = songLengthMs / lengthOfSliderBar;
 
@@ -26,8 +26,7 @@ let pausePlayMutex = false;
 let isPaused = true;
 let isLocked = false;
 let queuedPlaybackStateChange = false;
-let timer
-let furthestSongPosition = 0;
+let timer;
 
 let songTime = 0;
 let sliderPos = 0;
@@ -37,8 +36,12 @@ let sliderInitialPos = 0;
 let lengthOfRevealedBar = 0;
 
 let startTime;
-let timerStarted = false;
 let greatestSongTime = 0;
+
+const iframeElement = document.querySelector('iframe');
+// var iframeElementID = iframeElement.id;
+const soundcloud = SC.Widget(iframeElement);
+// var widget2         = SC.Widget(iframeElementID);
 
 const playbackState = {
 
@@ -46,6 +49,7 @@ const playbackState = {
     DONT_REVEAL: 1
    
 }
+
 
 
 window.onSpotifyIframeApiReady = (IFrameAPI) => {
@@ -61,7 +65,7 @@ window.onSpotifyIframeApiReady = (IFrameAPI) => {
         
         playbackController = EmbedController;
         
-        addEventListeners(playbackController);
+       
 
     };
 
@@ -69,6 +73,30 @@ window.onSpotifyIframeApiReady = (IFrameAPI) => {
 
 };
 
+soundcloud.bind(SC.Widget.Events.READY, function() {
+    soundcloud.bind(SC.Widget.Events.PLAY, function() {
+        // get information about currently playing sound
+        // widget.getCurrentSound(function(currentSound) {
+        // console.log('sound ' + currentSound.get('') + 'began to play');
+        // });
+        console.log("playing soundcloud widget");
+    });
+    // // get current level of volume
+    // widget.getVolume(function(volume) {
+    //     console.log('current volume value is ' + volume);
+    // });
+    // // set new volume level
+    // widget.setVolume(50);
+    // // get the value of the current position
+    // });
+
+    console.log("ready");
+
+    addEventListeners(playbackController);
+
+    // soundcloud.play();
+
+});
 
 
 function addEventListeners(playbackController){
@@ -115,6 +143,8 @@ function addEventListeners(playbackController){
 
         playPauseButton.addEventListener('click', () => {
 
+            console.log("soundcloud.play()");
+   
             if(songTime == greatestSongTime){
 
                 setPlaybackState(playbackState.REVEAL);
@@ -131,6 +161,7 @@ function addEventListeners(playbackController){
         skipStartButton.addEventListener('click', () => {
 
             setSongTime(0);
+            soundcloud.seekTo(0);
 
             if(isPaused){
 
@@ -221,7 +252,7 @@ function incrementSongTime(incrementAmountMs){
 
     if(songTime > songLengthMs){
      
-        setSongTime(songLengthMs);
+        setSongTime(songLengthMs); 
         stopTimer();
         return;
 
@@ -237,7 +268,13 @@ function setSongTime(timeMs){
     songTime = timeMs;
 
     console.log("songTime: " + songTime);
-    console.log("greatestSongTime: " + greatestSongTime);
+    // console.log("greatestSongTime: " + greatestSongTime);
+
+    
+    if(songTime > songLengthMs){
+        songTime = songLengthMs;
+        togglePlayback();
+    }
 
     if(songTime > greatestSongTime){
 
@@ -249,8 +286,8 @@ function setSongTime(timeMs){
 
         }
 
-        console.log(isLocked == playbackState.DONT_REVEAL);
         greatestSongTime = songTime;
+        updateAlbumBlur();
 
     }
 
@@ -269,10 +306,27 @@ function togglePlayback(){
 
     isPaused = !isPaused;
 
+    console.log(songTime);
+
     if(isPaused){
+
+        soundcloud.pause();
         stopTimer();
+
     }else{
-        startTimer();
+
+        if(songTime > songLengthMs - 1){
+
+            togglePlayback();
+            
+        }else{
+
+            soundcloud.seekTo(songTime);
+            soundcloud.play();
+            startTimer();
+
+        }
+        
     }
 
     if(playIcon != null){
@@ -312,22 +366,19 @@ function setPlaybackState(newIsLocked){
 }
 
 
-function updateAlbumBlur(songPositionMs){
+function updateAlbumBlur(){
 
-    if(songPositionMs > furthestSongPosition){
+    const blurAmount = parseInt(startingBlurAmount * ((lengthOfBlurMilliseconds - greatestSongTime) / lengthOfBlurMilliseconds));
 
-        furthestSongPosition = songPositionMs;
-        const blurAmount = startingBlurAmount * ((lengthOfBlurMilliseconds - furthestSongPosition) / lengthOfBlurMilliseconds);
+    if(blurAmount < 0){
 
-        if(blurAmount < 0){
+        albumImageContainer.style.filter = "blur(0px)";
+        return;
+        
+    }   
 
-            albumImageContainer.style.filter = "blur(0px)";
-            return;
-            
-        }   
-
-        albumImageContainer.style.filter = "blur(" + blurAmount + "px)";
-    }
+    albumImageContainer.style.filter = "blur(" + blurAmount + "px)";
+    
 
 }
 
