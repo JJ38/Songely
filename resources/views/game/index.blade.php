@@ -1,22 +1,31 @@
 <?php
-    //$albumImageLink = 'https://upload.wikimedia.org/wikipedia/en/thumb/a/ad/X_cover.png/250px-X_cover.png'
-    // $albumImageLink = 'https://upload.wikimedia.org/wikipedia/en/thumb/4/45/Divide_cover.png/250px-Divide_cover.png';
-    //$albumImageLink = 'https://upload.wikimedia.org/wikipedia/en/3/3f/Ed_Sheeran_%2B_cover.png';
+    // $albumImageLink = 'https://upload.wikimedia.org/wikipedia/en/thumb/a/ad/X_cover.png/250px-X_cover.png'
+    $albumImageLink = 'https://upload.wikimedia.org/wikipedia/en/thumb/4/45/Divide_cover.png/250px-Divide_cover.png';
+    // $albumImageLink = 'https://upload.wikimedia.org/wikipedia/en/3/3f/Ed_Sheeran_%2B_cover.png';
     // $albumImageLink = 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cd/Ed_Sheeran_-_Equals.png/250px-Ed_Sheeran_-_Equals.png';
     // $albumImageLink = 'https://m.media-amazon.com/images/I/715TN9agt9L.jpg';
-    $albumImageLink = 'https://miro.medium.com/v2/resize:fit:1400/1*TUOvhO_6LkPhp0orqH-QNA.jpeg';
-    $albumImageLink = 'https://indieground.net/wp-content/uploads/2013/05/indieblog-best-album-covers-80s-01.1-1024x1024.jpg';
+    // $albumImageLink = 'https://miro.medium.com/v2/resize:fit:1400/1*TUOvhO_6LkPhp0orqH-QNA.jpeg';
+    // $albumImageLink = 'https://indieground.net/wp-content/uploads/2013/05/indieblog-best-album-covers-80s-01.1-1024x1024.jpg';
 ?>
 
-<x-layout :links="['https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=play_arrow,replay,skip_previous']">
-    
+<x-layout :links="[
+    'https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=play_arrow,replay,skip_previous']">
+
+    {{-- <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/7qiZfU4dY1lWllzX7mPBI3?utm_source=generator" width="0" height="0" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe> --}}
+    {{-- <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/7qiZfU4dY1lWllzX7mPBI3?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe> --}}
+
+    <div id="embed-iframe"></div>
+    <script src="https://open.spotify.com/embed/iframe-api/v1" async>
+    </script>
+
+
     <div class="relative">
         
         <div class=" w-[320px] h-[390px] bg-white rounded-xl mx-auto pt-8 border drop-shadow-xl/25">
 
             <div class="w-[220px] m-auto">
                 
-                <div class="h-[220px] overflow-hidden rounded-xl blur-xl">
+                <div id="album_image_container" class="h-[220px] overflow-hidden rounded-xl blur-[24px] transition duration-900">
                     <img src="{{ $albumImageLink }}" 
                     alt="{{ Vite::asset('resources/images/album_cover_placeholder.png') }}"
                     >
@@ -24,16 +33,18 @@
                 
                 <div class="flex justify-between items-center mt-8">
             
-                    <x-circle-button class="w-[50px] h-[50px] hover:bg-pink hover:fill-white hover:cursor-pointer duration-200">
+                    <x-circle-button id="skip_start_button" class="w-[50px] h-[50px] hover:bg-pink hover:fill-white hover:cursor-pointer duration-200">
                         <svg class="w-6 h-6 my-auto rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M52.5 440.6c-9.5 7.9-22.8 9.7-34.1 4.4S0 428.4 0 416L0 96C0 83.6 7.2 72.3 18.4 67s24.5-3.6 34.1 4.4l192 160L256 241l0-145c0-17.7 14.3-32 32-32s32 14.3 32 32l0 320c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-145-11.5 9.6-192 160z"/></svg>
                     </x-circle-button>
         
-                    <x-circle-button class="w-[70px] h-[70px] hover:bg-pink hover:fill-white hover:cursor-pointer duration-200">
-                        <svg class="h-6 w-6 my-auto pl-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80L0 432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg>
+                    <x-circle-button id="play_pause_button" class="w-[70px] h-[70px] hover:bg-pink hover:fill-white hover:cursor-pointer duration-200">
+                        <svg id="play_icon" class="h-6 w-6 my-auto pl-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80L0 432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg>
+                        <svg id="pause_icon" class="hidden h-6 w-6 my-auto pl-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M48 64C21.5 64 0 85.5 0 112L0 400c0 26.5 21.5 48 48 48l32 0c26.5 0 48-21.5 48-48l0-288c0-26.5-21.5-48-48-48L48 64zm192 0c-26.5 0-48 21.5-48 48l0 288c0 26.5 21.5 48 48 48l32 0c26.5 0 48-21.5 48-48l0-288c0-26.5-21.5-48-48-48l-32 0z"/></svg>
                     </x-circle-button>
                     
-                    <x-circle-button class="w-[50px] h-[50px] hover:bg-pink hover:fill-white hover:cursor-pointer duration-200">
-                        <svg class="w-6 h-6 my-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M205 34.8c11.5 5.1 19 16.6 19 29.2l0 64 112 0c97.2 0 176 78.8 176 176c0 113.3-81.5 163.9-100.2 174.1c-2.5 1.4-5.3 1.9-8.1 1.9c-10.9 0-19.7-8.9-19.7-19.7c0-7.5 4.3-14.4 9.8-19.5c9.4-8.8 22.2-26.4 22.2-56.7c0-53-43-96-96-96l-96 0 0 64c0 12.6-7.4 24.1-19 29.2s-25 3-34.4-5.4l-160-144C3.9 225.7 0 217.1 0 208s3.9-17.7 10.6-23.8l160-144c9.4-8.5 22.9-10.6 34.4-5.4z"/></svg>
+                    <x-circle-button id="locked_button" class="w-[50px] h-[50px] hover:bg-pink hover:fill-white hover:cursor-pointer duration-200">
+                        <svg id="unlocked_icon" class="h-6 w-6 my-auto pl-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M352 144c0-44.2 35.8-80 80-80s80 35.8 80 80l0 48c0 17.7 14.3 32 32 32s32-14.3 32-32l0-48C576 64.5 511.5 0 432 0S288 64.5 288 144l0 48L64 192c-35.3 0-64 28.7-64 64L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-192c0-35.3-28.7-64-64-64l-32 0 0-48z"/></svg>
+                        <svg id="locked_icon" class="hidden h-6 w-6 my-auto pl-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M144 144l0 48 160 0 0-48c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192l0-48C80 64.5 144.5 0 224 0s144 64.5 144 144l0 48 16 0c35.3 0 64 28.7 64 64l0 192c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 256c0-35.3 28.7-64 64-64l16 0z"/></svg>
                     </x-circle-button>                
                                     
                 </div>
@@ -55,10 +66,12 @@
     <div class="relative mt-18 h-[1px] w-[900px] mx-auto">
 
         <div class="bg-pink h-[5px] w-[900px] absolute"></div>
-        <div class="bg-gray-300 h-[5px] w-[300px] absolute"></div>
-        <div class="bg-gray-600 h-[5px] w-[200px] absolute"></div>
+        <div id="revealed_bar" class="bg-gray-300 h-[5px] w-[0px] absolute"></div>
+        <div id="played_bar" class="bg-gray-600 h-[5px] w-[0px] absolute"></div>
 
-        <x-circle-button class="w-[27px] h-[27px] left-[200px] top-[2px] translate-x-[-50%] translate-y-[-50%] absolute hover:w-[32px] hover:h-[32px] hover:cursor-pointer duration-100"></x-circle-button>
+        <x-circle-button id="slider_button" class="w-[27px] h-[27px] top-[2px] translate-x-[-50%] translate-y-[-50%] absolute hover:w-[32px] hover:h-[32px] hover:cursor-pointer" style="left: 0px"></x-circle-button>
+        {{-- <input type="range" min="1" max="100" value="50" class="absolute translate-y-[-50%]" id="myRange"> --}}
+
 
     </div>
 
