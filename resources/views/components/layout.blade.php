@@ -12,7 +12,6 @@
     @endforeach
 
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="alternate" type="application/json+oembed" href="https://open.spotify.com/oembed?url=https%3A%2F%2Fopen.spotify.com%2Fshow%2F5eXZwvvxt3K2dxha3BSaAe" />
    
     @vite(['resources/js/app.js', 'resources/css/app.css', 'resources/js/game-controller.js'])
 

@@ -11,13 +11,10 @@
 <x-layout :links="[
     'https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=play_arrow,replay,skip_previous']">
 
-    {{-- <div id="embed-iframe"></div>
-    <script src="https://open.spotify.com/embed/iframe-api/v1" async>
-    </script> --}}
-
-    <iframe id="sc-widget" class="hidden" src="https://w.soundcloud.com/player/?url=https://soundcloud.com/edsheeran/shape-of-you" width="100" height="100" scrolling="no" frameborder="no" allow="autoplay"></iframe>
+    <iframe id="sc-widget" class="hidden" src="https://w.soundcloud.com/player/?url=https://soundcloud.com/edsheeran/ed-sheeran-bad-habits" width="100" height="100" scrolling="no" frameborder="no" allow="autoplay" loading="eager"></iframe>
     <script src="https://w.soundcloud.com/player/api.js" type="text/javascript"></script>
-    
+    <div id="dummy_play_button"></div>
+
     <div class="relative">
         
         <div class=" w-[320px] h-[390px] bg-white rounded-xl mx-auto pt-8 border drop-shadow-xl/25">
@@ -36,7 +33,7 @@
                         <svg class="w-6 h-6 my-auto rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M52.5 440.6c-9.5 7.9-22.8 9.7-34.1 4.4S0 428.4 0 416L0 96C0 83.6 7.2 72.3 18.4 67s24.5-3.6 34.1 4.4l192 160L256 241l0-145c0-17.7 14.3-32 32-32s32 14.3 32 32l0 320c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-145-11.5 9.6-192 160z"/></svg>
                     </x-circle-button>
         
-                    <x-circle-button id="play_pause_button" class="w-[70px] h-[70px] hover:bg-pink hover:fill-white hover:cursor-pointer duration-200">
+                    <x-circle-button id="play_pause_button" class="w-[70px] h-[70px] bg-gray-300 hover:cursor-pointer duration-200">
                         <svg id="play_icon" class="h-6 w-6 my-auto pl-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80L0 432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg>
                         <svg id="pause_icon" class="hidden h-6 w-6 my-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M48 64C21.5 64 0 85.5 0 112L0 400c0 26.5 21.5 48 48 48l32 0c26.5 0 48-21.5 48-48l0-288c0-26.5-21.5-48-48-48L48 64zm192 0c-26.5 0-48 21.5-48 48l0 288c0 26.5 21.5 48 48 48l32 0c26.5 0 48-21.5 48-48l0-288c0-26.5-21.5-48-48-48l-32 0z"/></svg>
                     </x-circle-button>
@@ -68,7 +65,7 @@
         <div id="revealed_bar" class="bg-gray-300 h-[5px] w-[0px] absolute"></div>
         <div id="played_bar" class="bg-gray-600 h-[5px] w-[0px] absolute"></div>
 
-        <x-circle-button id="slider_button" class="w-[27px] h-[27px] top-[2px] translate-x-[-50%] translate-y-[-50%] absolute hover:w-[32px] hover:h-[32px] hover:cursor-pointer" style="left: 0px"></x-circle-button>
+        <x-circle-button id="slider_button" class="w-[27px] h-[27px] top-[2px] bg-white translate-x-[-50%] translate-y-[-50%] absolute hover:w-[32px] hover:h-[32px] hover:cursor-pointer" style="left: 0px"></x-circle-button>
 
     </div>
 
@@ -91,15 +88,12 @@
             Guess
         </button>
     </div>
-
-
     
     <div class="absolute left-0 top-0 blur-[300px] translate-x-[-90%] translate-y-[-50%] -z-10">
         <img class="w-150" src="{{ $albumImageLink }}" 
         alt="{{ Vite::asset('resources/images/album_cover_placeholder.png') }}"
         >
     </div>
-
     
     <div class="absolute right-0 bottom-0 blur-[300px] translate-x-[90%] translate-y-[50%] -z-10">
         <img class="w-150" src="{{ $albumImageLink }}" 

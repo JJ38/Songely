@@ -2,6 +2,8 @@ const playPauseButton = document.getElementById('play_pause_button');
 const skipStartButton = document.getElementById('skip_start_button');
 const lockedButton = document.getElementById('locked_button');
 
+const dummyPlayButton = document.getElementById('dummy_play_button');
+
 const sliderButton = document.getElementById('slider_button');
 
 const playedBar = document.getElementById('played_bar');
@@ -38,10 +40,15 @@ let lengthOfRevealedBar = 0;
 let startTime;
 let greatestSongTime = 0;
 
+let soundcloudReady = false;
+let hasntBuffered = true;
+let songOffset = 0;
+
 const iframeElement = document.querySelector('iframe');
-// var iframeElementID = iframeElement.id;
 const soundcloud = SC.Widget(iframeElement);
-// var widget2         = SC.Widget(iframeElementID);
+
+const songUrl = "https://soundcloud.com/postmalone/post-malone-something-real";
+// const songUrl = "https://soundcloud.com/greenday/holiday-1";
 
 const playbackState = {
 
@@ -50,101 +57,51 @@ const playbackState = {
    
 }
 
-
-
-window.onSpotifyIframeApiReady = (IFrameAPI) => {
-    const element = document.getElementById('embed-iframe');
-    
-    const options = {
-        width: '0',
-        height: '0',
-        uri: 'spotify:track:7qiZfU4dY1lWllzX7mPBI3' //https://open.spotify.com/embed/track/7qiZfU4dY1lWllzX7mPBI3
-    };
-
-    const callback = (EmbedController) => {
-        
-        playbackController = EmbedController;
-        
-       
-
-    };
-
-    IFrameAPI.createController(element, options, callback);
-
-};
-
 soundcloud.bind(SC.Widget.Events.READY, function() {
-    soundcloud.bind(SC.Widget.Events.PLAY, function() {
-        // get information about currently playing sound
-        // widget.getCurrentSound(function(currentSound) {
-        // console.log('sound ' + currentSound.get('') + 'began to play');
-        // });
-        console.log("playing soundcloud widget");
-    });
-    // // get current level of volume
-    // widget.getVolume(function(volume) {
-    //     console.log('current volume value is ' + volume);
-    // });
-    // // set new volume level
-    // widget.setVolume(50);
-    // // get the value of the current position
-    // });
 
-    console.log("ready");
 
-    addEventListeners(playbackController);
+    soundcloud.load(songUrl);
 
-    // soundcloud.play();
+    setTimeout(() => { bufferSong(); }, 1000);
+
+    soundcloud.bind(SC.Widget.Events.PAUSE, soundcloudPaused);
+    // soundcloud.bind(SC.Widget.Events.PLAY_PROGRESS, (state) => { soundcloudPlaying(state); });
+
+    //buffer and play song in background to stop jumping at the start
+    addEventListeners();
 
 });
 
 
-function addEventListeners(playbackController){
+function bufferSong(){    
+    //makes soundcloud retrieve audio files. This will stop the audio from jumping at the start
+    soundcloud.seekTo(1000);
+    soundcloudIsReady(); 
+    setTimeout(() => { soundcloud.setVolume(100); soundcloud.seekTo(0); }, 500);
+}
 
-    //playbackController.addListener('playback_update', e => {
+
+function soundcloudIsReady(){
+
+    soundcloudReady = true;
+    playPauseButton.classList.add('bg-white','hover:bg-pink', 'hover:fill-white');
+
+}
+
+function soundcloudPaused(){
+    console.log("soundcloud paused");
+    if(!hasntBuffered){
+
+    }
+}
 
 
-    //     if(e.data.isPaused != isPaused){
+function addEventListeners(){
 
-    //         isPaused = e.data.isPaused;
-
-    //         if(isPaused){
-
-    //             stopTimer();
-    //             console.log(songTime);
-
-    //         }else{
-
-    //             if(!timerStarted){
-    //                 startTimer();
-    //             }
-           
-                
-    //         }
-
-    //         //ui and controller state in sync. The mutext can be opened
-    //         pausePlayMutex = !pausePlayMutex;
-
-    //         //check if playback is wanting to be updated immediately
-    //         if(queuedPlaybackStateChange){
-    //             togglePlayback(playbackController);
-    //             queuedPlaybackStateChange = false;
-    //         }
-    //     }
-
-    //     const songPositionMs = e.data.position;
-
-    //     updateAlbumBlur(songPositionMs);
-    //     //updateSliderPosition(songPositionMs);
-
-    // });
-      
     if(playPauseButton != null){
 
         playPauseButton.addEventListener('click', () => {
 
-            console.log("soundcloud.play()");
-   
             if(songTime == greatestSongTime){
 
                 setPlaybackState(playbackState.REVEAL);
@@ -234,7 +191,7 @@ function addEventListeners(playbackController){
 function startTimer(){
 
     if(!isPaused){
-        timer = setInterval(async () => {incrementSongTime(10)}, 10);
+        timer = setInterval(async () => {incrementSongTime()}, 10);
     }
 
 }
@@ -246,19 +203,22 @@ function stopTimer(){
 }
 
 
-function incrementSongTime(incrementAmountMs){
+function incrementSongTime(){
 
-    const newSongTime = songTime + incrementAmountMs;
+    soundcloud.getPosition((value) => {
+        console.log("soundcloudTime: " + value);
+
+        setSongTime(value);
+
+    });
 
     if(songTime > songLengthMs){
      
         setSongTime(songLengthMs); 
-        stopTimer();
+        //stopTimer();
         return;
 
     }
-
-    setSongTime(newSongTime);
 
 }
 
@@ -267,9 +227,8 @@ function setSongTime(timeMs){
 
     songTime = timeMs;
 
-    console.log("songTime: " + songTime);
+    // console.log("songTime: " + songTime);
     // console.log("greatestSongTime: " + greatestSongTime);
-
     
     if(songTime > songLengthMs){
         songTime = songLengthMs;
@@ -302,11 +261,13 @@ function setSongTime(timeMs){
 
 function togglePlayback(){
 
+    if(!soundcloudReady){
+        return;
+    }
+
     pausePlayMutex = true;
 
     isPaused = !isPaused;
-
-    console.log(songTime);
 
     if(isPaused){
 
