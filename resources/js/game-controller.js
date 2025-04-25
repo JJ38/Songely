@@ -2,8 +2,6 @@ const playPauseButton = document.getElementById('play_pause_button');
 const skipStartButton = document.getElementById('skip_start_button');
 const lockedButton = document.getElementById('locked_button');
 
-const dummyPlayButton = document.getElementById('dummy_play_button');
-
 const sliderButton = document.getElementById('slider_button');
 
 const playedBar = document.getElementById('played_bar');
@@ -16,12 +14,15 @@ const unlockedIcon = document.getElementById('unlocked_icon');
 
 const albumImageContainer = document.getElementById('album_image_container');
 
-const startingBlurAmount = 24; //px
+const startingBlurAmount = 40; //px
 const lengthOfBlurMilliseconds = 20000;
 const lengthOfSliderBar = 900;
-const songLengthMs = 5000;
+let songLengthMs = 29500;
+let totalSongLength
 
-const scaleFactor = songLengthMs / lengthOfSliderBar;
+const iframeElement = document.getElementById('sc-widget');
+
+let scaleFactor = songLengthMs / lengthOfSliderBar;
 
 let playbackController;
 let pausePlayMutex = false;
@@ -44,11 +45,21 @@ let soundcloudReady = false;
 let hasntBuffered = true;
 let songOffset = 0;
 
-const iframeElement = document.querySelector('iframe');
-const soundcloud = SC.Widget(iframeElement);
 
-const songUrl = "https://soundcloud.com/postmalone/post-malone-something-real";
-// const songUrl = "https://soundcloud.com/greenday/holiday-1";
+// const songUrl = "https://soundcloud.com/postmalone/post-malone-something-real";
+// const songUrl = "https://soundcloud.com/shaboozey/in-da-club";
+const songUrl = "https://api.soundcloud.com/tracks/302151081";
+
+
+//737896987
+//what-do-you-mean
+
+//use widget for audio
+//https://api-widget.soundcloud.com/resolve?url=https%3A//api.soundcloud.com/tracks/1071204931&format=json&client_id=gqKBMSuBw5rbN9rDRYPqKNvF17ovlObu
+
+
+
+//https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/{{track_id}} to get infor 
 
 const playbackState = {
 
@@ -57,15 +68,16 @@ const playbackState = {
    
 }
 
+
+const soundcloud = SC.Widget(iframeElement);
+
 soundcloud.bind(SC.Widget.Events.READY, function() {
 
-
-    soundcloud.load(songUrl);
-
-    setTimeout(() => { bufferSong(); }, 1000);
-
+    bufferSong();
+    
     soundcloud.bind(SC.Widget.Events.PAUSE, soundcloudPaused);
-    // soundcloud.bind(SC.Widget.Events.PLAY_PROGRESS, (state) => { soundcloudPlaying(state); });
+    soundcloud.getDuration((value) => {console.log(value)});
+    // soundcloud.bind(SC.Widget.Events.PLAY_PROGRESS, (state) => { console.log(state); });
 
     //buffer and play song in background to stop jumping at the start
     addEventListeners();
@@ -74,12 +86,16 @@ soundcloud.bind(SC.Widget.Events.READY, function() {
 
 
 function bufferSong(){    
+
     //makes soundcloud retrieve audio files. This will stop the audio from jumping at the start
     soundcloud.seekTo(1000);
-    soundcloudIsReady(); 
-    setTimeout(() => { soundcloud.setVolume(100); soundcloud.seekTo(0); }, 500);
+    setTimeout(() => { 
+        soundcloud.setVolume(100); 
+        soundcloud.seekTo(0); 
+        soundcloudIsReady(); 
+    }, 1000);
+    
 }
-
 
 function soundcloudIsReady(){
 
@@ -87,6 +103,7 @@ function soundcloudIsReady(){
     playPauseButton.classList.add('bg-white','hover:bg-pink', 'hover:fill-white');
 
 }
+
 
 function soundcloudPaused(){
     console.log("soundcloud paused");
@@ -196,6 +213,7 @@ function startTimer(){
 
 }
 
+
 function stopTimer(){
 
     clearInterval(timer);
@@ -206,7 +224,7 @@ function stopTimer(){
 function incrementSongTime(){
 
     soundcloud.getPosition((value) => {
-        console.log("soundcloudTime: " + value);
+        // console.log("soundcloudTime: " + value);
 
         setSongTime(value);
 
@@ -227,7 +245,7 @@ function setSongTime(timeMs){
 
     songTime = timeMs;
 
-    // console.log("songTime: " + songTime);
+    console.log("songTime: " + songTime);
     // console.log("greatestSongTime: " + greatestSongTime);
     
     if(songTime > songLengthMs){
@@ -241,6 +259,7 @@ function setSongTime(timeMs){
 
             songTime = greatestSongTime;
             togglePlayback();
+            togglePlaybackState();
             return;
 
         }
@@ -260,6 +279,9 @@ function setSongTime(timeMs){
 
 
 function togglePlayback(){
+
+
+    console.log("toggleplayback");
 
     if(!soundcloudReady){
         return;

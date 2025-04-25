@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Song;
 use Illuminate\Http\Request;
 
 class GameController extends Controller
@@ -10,8 +11,18 @@ class GameController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        return view('game.index');
+    {   
+
+        $song = Song::query()
+            ->inRandomOrder()
+            ->first();
+
+        // dd($song);
+        $song->albumCover =str_replace('-large.', '-t500x500.', $song->albumCover);
+
+        return view('game.index', [
+            'song' => $song
+        ]);
     }
 
     /**
