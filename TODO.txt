@@ -1,1 +1,2 @@
+-make api endpoint to fetch songs from
 -sign in and register
