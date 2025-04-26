@@ -16,6 +16,7 @@
     @vite(['resources/js/app.js', 'resources/css/app.css', 'resources/js/game-controller.js'])
 
     <title>Songely</title>
+    
 </head>
 <body class="flex flex-col bg-lightgray font-hanken-grotesk min-h-screen overflow-hidden">
     <nav class="flex justify-end pt-7 px-12">

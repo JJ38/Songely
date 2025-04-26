@@ -17,7 +17,7 @@ const albumImageContainer = document.getElementById('album_image_container');
 const startingBlurAmount = 40; //px
 const lengthOfBlurMilliseconds = 20000;
 const lengthOfSliderBar = 900;
-let songLengthMs = 29500;
+let songLengthMs = 30000;
 let totalSongLength
 
 const iframeElement = document.getElementById('sc-widget');
@@ -31,7 +31,7 @@ let isLocked = false;
 let queuedPlaybackStateChange = false;
 let timer;
 
-let songTime = 0;
+let songTime = 28000;
 let sliderPos = 0;
 let sliderDown = false;
 let sliderDownPos = false;
@@ -46,19 +46,15 @@ let hasntBuffered = true;
 let songOffset = 0;
 
 
-// const songUrl = "https://soundcloud.com/postmalone/post-malone-something-real";
+const songUrl = "https://soundcloud.com/postmalone/post-malone-something-real";
 // const songUrl = "https://soundcloud.com/shaboozey/in-da-club";
-const songUrl = "https://api.soundcloud.com/tracks/302151081";
-
+// const songUrl = "https://api.soundcloud.com/tracks/302151081";
 
 //737896987
 //what-do-you-mean
 
 //use widget for audio
 //https://api-widget.soundcloud.com/resolve?url=https%3A//api.soundcloud.com/tracks/1071204931&format=json&client_id=gqKBMSuBw5rbN9rDRYPqKNvF17ovlObu
-
-
-
 //https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/{{track_id}} to get infor 
 
 const playbackState = {
@@ -68,16 +64,23 @@ const playbackState = {
    
 }
 
+const iframe = document.createElement('iframe');
+iframe.id = "sc-widget";
+iframe.src = getIframeURL("https://api.soundcloud.com/tracks/255905673");
+iframe.allow = "autoplay";
+iframe.classList.add("hidden");
 
-const soundcloud = SC.Widget(iframeElement);
+document.body.appendChild(iframe);
+
+const soundcloud = SC.Widget(iframe);
 
 soundcloud.bind(SC.Widget.Events.READY, function() {
 
-    bufferSong();
-    
+    bufferSong();  
+
     soundcloud.bind(SC.Widget.Events.PAUSE, soundcloudPaused);
     soundcloud.getDuration((value) => {console.log(value)});
-    // soundcloud.bind(SC.Widget.Events.PLAY_PROGRESS, (state) => { console.log(state); });
+    soundcloud.bind(SC.Widget.Events.FINISH, soundcloudFinished);
 
     //buffer and play song in background to stop jumping at the start
     addEventListeners();
@@ -85,16 +88,20 @@ soundcloud.bind(SC.Widget.Events.READY, function() {
 });
 
 
-function bufferSong(){    
+function bufferSong(){ 
+
+    soundcloud.setVolume(0); 
 
     //makes soundcloud retrieve audio files. This will stop the audio from jumping at the start
     soundcloud.seekTo(1000);
     setTimeout(() => { 
+
         soundcloud.setVolume(100); 
         soundcloud.seekTo(0); 
         soundcloudIsReady(); 
+
     }, 1000);
-    
+
 }
 
 function soundcloudIsReady(){
@@ -104,12 +111,26 @@ function soundcloudIsReady(){
 
 }
 
+function getIframeURL(url){
+
+    const iframeURL = "https://w.soundcloud.com/player/?url=" + url;
+    return iframeURL;
+
+}
+
 
 function soundcloudPaused(){
-    console.log("soundcloud paused");
-    if(!hasntBuffered){
 
-    }
+    console.log("soundcloud paused");
+
+}
+
+
+function soundcloudFinished(){
+
+    togglePlayback();
+    updateSlidebar(lengthOfSliderBar);
+
 }
 
 
@@ -244,7 +265,6 @@ function incrementSongTime(){
 function setSongTime(timeMs){
 
     songTime = timeMs;
-
     console.log("songTime: " + songTime);
     // console.log("greatestSongTime: " + greatestSongTime);
     
@@ -255,6 +275,7 @@ function setSongTime(timeMs){
 
     if(songTime > greatestSongTime){
 
+        //stops song playing past unrevealed section if locked
         if(isLocked == playbackState.DONT_REVEAL){
 
             songTime = greatestSongTime;

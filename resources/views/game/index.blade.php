@@ -5,9 +5,6 @@
 <x-layout :links="[
     'https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=play_arrow,replay,skip_previous']">
 
-
-{{-- https://api-widget.soundcloud.com/resolve?url=https%3A//api.soundcloud.com/tracks/737896987&format=json&client_id=gqKBMSuBw5rbN9rDRYPqKNvF17ovlObu&app_version=1745220450 --}}
-<iframe id="sc-widget" class="hidden" src="https://w.soundcloud.com/player/?url={{ $song->url }}" width="100" height="100" scrolling="no" frameborder="no" allow="autoplay" loading="eager"></iframe>
     <script src="https://w.soundcloud.com/player/api.js" type="text/javascript"></script>
 
     <div class="relative">
@@ -70,7 +67,7 @@
     <div class="w-[1000px] mx-auto">
         <input class="bg-white h-[60px] w-full border mt-12 px-5 text-xl" placeholder="Guess a song" />
 
-        <div class="bg-white text-xl border border-t-0">
+        {{-- <div class="bg-white text-xl border border-t-0">
     
             <x-suggested-song>a team ed sheeran</x-suggested-song>
             <x-suggested-song>a team theme song</x-suggested-song>
@@ -78,7 +75,7 @@
             <x-suggested-song>a team theme</x-suggested-song>
     
         </div>
-    
+     --}}
     </div>
   
     <div class="mx-auto w-min mt-auto mb-8"> 
