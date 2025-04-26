@@ -1,6 +1,9 @@
 const playPauseButton = document.getElementById('play_pause_button');
 const skipStartButton = document.getElementById('skip_start_button');
 const lockedButton = document.getElementById('locked_button');
+const readyButton = document.getElementById('ready_button');
+
+const playbackButtonWrapper = document.getElementById('playback_button_wrapper');
 
 const sliderButton = document.getElementById('slider_button');
 
@@ -31,7 +34,7 @@ let isLocked = false;
 let queuedPlaybackStateChange = false;
 let timer;
 
-let songTime = 28000;
+let songTime = 1; //set to 1 not 0 to stop jumping at the start
 let sliderPos = 0;
 let sliderDown = false;
 let sliderDownPos = false;
@@ -45,6 +48,7 @@ let soundcloudReady = false;
 let hasntBuffered = true;
 let songOffset = 0;
 
+let soundcloud;
 
 const songUrl = "https://soundcloud.com/postmalone/post-malone-something-real";
 // const songUrl = "https://soundcloud.com/shaboozey/in-da-club";
@@ -64,40 +68,65 @@ const playbackState = {
    
 }
 
-const iframe = document.createElement('iframe');
-iframe.id = "sc-widget";
-iframe.src = getIframeURL("https://api.soundcloud.com/tracks/255905673");
-iframe.allow = "autoplay";
-iframe.classList.add("hidden");
+addEventListeners();
 
-document.body.appendChild(iframe);
+function startGame(){
+    
 
-const soundcloud = SC.Widget(iframe);
+    //get song
 
-soundcloud.bind(SC.Widget.Events.READY, function() {
+    //initialise soundcloud
+    initialiseSoundcloud(getIframeURL("https://api.soundcloud.com/tracks/302151081"));
 
-    bufferSong();  
 
-    soundcloud.bind(SC.Widget.Events.PAUSE, soundcloudPaused);
-    soundcloud.getDuration((value) => {console.log(value)});
-    soundcloud.bind(SC.Widget.Events.FINISH, soundcloudFinished);
+}
 
-    //buffer and play song in background to stop jumping at the start
-    addEventListeners();
 
-});
+function loadSong(song){
+
+    soundcloud.load(song);
+
+}
+
+
+function initialiseSoundcloud(songUrl){
+
+    const iframe = document.createElement('iframe');
+    iframe.id = "sc-widget";
+    iframe.src = "https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/255905673";
+    iframe.allow = "autoplay";
+    iframe.classList.add("hidden");
+
+    document.body.appendChild(iframe);
+    soundcloud = SC.Widget(iframe);
+
+    soundcloud.bind(SC.Widget.Events.READY, function() {
+
+        soundcloud.bind(SC.Widget.Events.PAUSE, soundcloudPaused);
+        soundcloud.getDuration((value) => {console.log(value)});
+        soundcloud.bind(SC.Widget.Events.FINISH, soundcloudFinished);
+
+        //buffer and play song in background to stop jumping at the start
+        setTimeout(() => {
+            bufferSong();
+        }, 1000);
+
+
+    });
+
+}
 
 
 function bufferSong(){ 
 
-    soundcloud.setVolume(0); 
+    console.log("bufferSong");
 
-    //makes soundcloud retrieve audio files. This will stop the audio from jumping at the start
-    soundcloud.seekTo(1000);
+    soundcloud.setVolume(100); 
+    soundcloud.play();
+
     setTimeout(() => { 
 
-        soundcloud.setVolume(100); 
-        soundcloud.seekTo(0); 
+        soundcloud.pause();
         soundcloudIsReady(); 
 
     }, 1000);
@@ -122,6 +151,14 @@ function getIframeURL(url){
 function soundcloudPaused(){
 
     console.log("soundcloud paused");
+    
+
+    setTimeout(() => { 
+
+        soundcloud.seekTo(0); 
+        soundcloud.setVolume(100);
+
+    }, 200);
 
 }
 
@@ -155,14 +192,15 @@ function addEventListeners(){
 
         skipStartButton.addEventListener('click', () => {
 
-            setSongTime(0);
-            soundcloud.seekTo(0);
-
             if(isPaused){
 
                 togglePlayback();
 
             }
+
+            setSongTime(0);
+            soundcloud.seekTo(0);
+
 
             setPlaybackState(playbackState.DONT_REVEAL);
 
@@ -222,14 +260,23 @@ function addEventListeners(){
         });
 
     }
+    
+    if(readyButton != null){
 
+        readyButton.addEventListener('click', () => {
+            readyButton.classList.add("hidden");
+            playbackButtonWrapper.classList.remove("hidden");
+            startGame();
+        });
+
+    }
 }
 
 
 function startTimer(){
 
     if(!isPaused){
-        timer = setInterval(async () => {incrementSongTime()}, 10);
+        timer = setInterval(() => {incrementSongTime()}, 10);
     }
 
 }
@@ -239,6 +286,13 @@ function stopTimer(){
 
     clearInterval(timer);
 
+}
+
+function debug(){
+    setInterval(() => {
+        soundcloud.getPosition((value) => { console.log("soundcloudTime: " + value);});  
+    }, 10);
+ 
 }
 
 
@@ -300,9 +354,9 @@ function setSongTime(timeMs){
 
 
 function togglePlayback(){
+   
 
-
-    console.log("toggleplayback");
+    console.log("greatestSongTime: " + greatestSongTime);
 
     if(!soundcloudReady){
         return;
@@ -383,7 +437,6 @@ function updateAlbumBlur(){
 
     albumImageContainer.style.filter = "blur(" + blurAmount + "px)";
     
-
 }
 
 
