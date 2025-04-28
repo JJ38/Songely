@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Song;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class GameController extends Controller
@@ -18,21 +19,23 @@ class GameController extends Controller
             ->first();
 
         // dd($song);
-        $song->albumCover =str_replace('-large.', '-t500x500.', $song->albumCover);
+        $song->albumCover = str_replace('-large.', '-t500x500.', $song->albumCover);
 
         return response()->json([
             'id' => $song->id,
             'title' => $song->title,
-            'albumCover' => $song->albumCover
+            'albumCover' => $song->albumCover,
+            'message' => "refactored api",
+
         ]);
 
     }
 
-    public function show(string $guess)
-    {   
-        
+    public function store()
+    {
         return response()->json([
-            'correct_guess' =>  true
+            'correct_guess' =>  true,
+            'message' => "refactored api",
         ]);
     }
 

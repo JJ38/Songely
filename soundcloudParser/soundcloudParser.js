@@ -11,19 +11,66 @@ function parseSongs(soundcloudSongData){
 
         const songData = soundcloudSongData[i];
 
-        const song = {
-            id: songData['id'],
-            urn: songData['urn'],
-            title: songData['title'],
-            genre: songData['genre'],
-            albumCover: songData['artwork_url'],
-            url: songData['permalink_url'],
-        
-        };
+        try{
 
-        songList.push(song);
+            const song = {
+
+                id: songData['id'],
+                urn: songData['urn'],
+                title: songData['title'],
+                genre: songData['genre'],
+                albumCover: songData['artwork_url'],
+                url: songData['permalink_url'],
+                artist: songData['publisher_metadata']['artist']
+
+            };
+
+            validateSong(song);
+
+            if(song == null){
+                return;
+            }
+
+            songList.push(song);
+
+        }catch(e){
+
+        }
 
     }
+
+}
+
+function validateSong(song){
+
+    if(song['id'] == null){
+        return null;
+    }
+
+    if(song['urn'] == null){
+        return null;
+    }
+
+    if(song['title'] == null){
+        return null;
+    }
+
+    if(song['genre'] == null){
+        return null;
+    }
+
+    if(song['albumCover'] == null){
+        return null;
+    }
+
+    if(song['url'] == null){
+        return null;
+    }
+    if(song['artist'] == null || song['artist'].includes("https://")){
+        return null;
+    }
+
+    return song;
 
 }
 
@@ -73,7 +120,7 @@ function getSoundcloudData(json){
     const requestArray = eval(json['log']['entries']);
 
     for(let i = 0; i < requestArray.length; i++){
-        
+
         const textToParse = json['log']['entries'][i]['response']['content']['text'];
         const encoding = json['log']['entries'][i]['response']['content']['encoding'];
 
@@ -88,7 +135,7 @@ function getSoundcloudData(json){
         if(textToParse[0] == "["){
 
           const songDataArray = eval(textToParse);
-          
+
           console.log(songDataArray);
           parseSongs(songDataArray);
 
@@ -112,8 +159,9 @@ function convertToCSV(){
         song += songData['title'] + ','
         song += songData['genre'] + ','
         song += songData['albumCover'] + ','
+        song += songData['artist'] + ','
         song += songData['url'] + " <br> "
-        
+
         message.innerHTML = message.innerHTML + song;
 
     }

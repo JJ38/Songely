@@ -7,38 +7,43 @@
 
     <script src="https://w.soundcloud.com/player/api.js" type="text/javascript"></script>
 
-    <div class="relative">
-        
-        <div class="w-[320px] h-[390px] bg-white rounded-xl mx-auto pt-8 border drop-shadow-xl/25">
+    <div class="flex justify-center">
+
+        <div class="flex h-min mt-auto mr-5 gap-2">
+            <p>Score:</p>
+            <p id="score">0</p>
+        </div>
+
+        <div class="w-[320px] h-[390px] bg-white rounded-xl pt-8 border drop-shadow-xl/25">
 
             <div class="w-[220px] m-auto">
 
                 <div class="rounded-2xl">
                     <div id="album_image_container" class="h-[220px] overflow-hidden rounded-xl blur-[40px]">
-                        <img id="main_album_cover" src="" 
+                        <img id="main_album_cover" src=""
                          alt="{{ Vite::asset('resources/images/album_cover_placeholder.png') }}"
                         >
                     </div>
                 </div>
-                
+
                 <div class="mt-8 h-[70px]">
 
                     <div id="playback_button_wrapper" class="flex justify-between items-center hidden">
-            
+
                         <x-circle-button id="skip_start_button" class="w-[50px] h-[50px] bg-white hover:bg-pink hover:fill-white hover:cursor-pointer duration-200">
                             <svg class="w-6 h-6 my-auto rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M52.5 440.6c-9.5 7.9-22.8 9.7-34.1 4.4S0 428.4 0 416L0 96C0 83.6 7.2 72.3 18.4 67s24.5-3.6 34.1 4.4l192 160L256 241l0-145c0-17.7 14.3-32 32-32s32 14.3 32 32l0 320c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-145-11.5 9.6-192 160z"/></svg>
                         </x-circle-button>
-            
+
                         <x-circle-button id="play_pause_button" class="w-[70px] h-[70px] bg-gray-300 hover:cursor-pointer duration-200">
                             <svg id="play_icon" class="h-6 w-6 my-auto pl-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80L0 432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg>
                             <svg id="pause_icon" class="hidden h-6 w-6 my-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M48 64C21.5 64 0 85.5 0 112L0 400c0 26.5 21.5 48 48 48l32 0c26.5 0 48-21.5 48-48l0-288c0-26.5-21.5-48-48-48L48 64zm192 0c-26.5 0-48 21.5-48 48l0 288c0 26.5 21.5 48 48 48l32 0c26.5 0 48-21.5 48-48l0-288c0-26.5-21.5-48-48-48l-32 0z"/></svg>
                         </x-circle-button>
-                        
+
                         <x-circle-button id="locked_button" class="w-[50px] h-[50px] bg-white hover:bg-pink hover:fill-white hover:cursor-pointer duration-200">
                             <svg id="unlocked_icon" class="h-6 w-6 my-auto pl-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M352 144c0-44.2 35.8-80 80-80s80 35.8 80 80l0 48c0 17.7 14.3 32 32 32s32-14.3 32-32l0-48C576 64.5 511.5 0 432 0S288 64.5 288 144l0 48L64 192c-35.3 0-64 28.7-64 64L0 448c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-192c0-35.3-28.7-64-64-64l-32 0 0-48z"/></svg>
                             <svg id="locked_icon" class="hidden h-6 w-6 my-auto pl-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M144 144l0 48 160 0 0-48c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192l0-48C80 64.5 144.5 0 224 0s144 64.5 144 144l0 48 16 0c35.3 0 64 28.7 64 64l0 192c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 256c0-35.3 28.7-64 64-64l16 0z"/></svg>
-                        </x-circle-button>                
-                                        
+                        </x-circle-button>
+
                     </div>
 
                     <div class="flex justify-center h-full">
@@ -46,21 +51,52 @@
                             Ready
                         </button>
                     </div>
-                    
+
                 </div>
 
-               
+
             </div>
 
         </div>
 
-              {{-- image below card to create shadow --}}
+        <div class="flex flex-col justify-between ml-5 mt-4">
 
-        {{-- <div class="absolute left-[50%] translate-x-[-50%] top-10 -z-10 blur-[50px]">
-            <img src="https://upload.wikimedia.org/wikipedia/en/4/45/Divide_cover.png" 
-            alt="{{ Vite::asset('resources/images/album_cover_placeholder.png') }}"
-            >
-        </div> --}}
+            <div class="right-0 top-0 flex">
+
+                <div id="mute_button_container" class="relative w-8 h-8">
+
+                    <svg id="volume_icon" class="absolute w-8 h-8 hover:cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                        <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                        <path d="M533.6 32.5C598.5 85.2 640 165.8 640 256s-41.5 170.7-106.4 223.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C557.5 398.2 592 331.2 592 256s-34.5-142.2-88.7-186.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM473.1 107c43.2 35.2 70.9 88.9 70.9 149s-27.7 113.8-70.9 149c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C475.3 341.3 496 301.1 496 256s-20.7-85.3-53.2-111.8c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zm-60.5 74.5C434.1 199.1 448 225.9 448 256s-13.9 56.9-35.4 74.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C393.1 284.4 400 271 400 256s-6.9-28.4-17.7-37.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM301.1 34.8C312.6 40 320 51.4 320 64l0 384c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352 64 352c-35.3 0-64-28.7-64-64l0-64c0-35.3 28.7-64 64-64l67.8 0L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3z"/>
+                    </svg>
+
+                    <svg id="mute_icon" class="absolute hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                        <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                        <path d="M301.1 34.8C312.6 40 320 51.4 320 64l0 384c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352 64 352c-35.3 0-64-28.7-64-64l0-64c0-35.3 28.7-64 64-64l67.8 0L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3zM425 167l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0z"/>
+                    </svg>
+
+                </div>
+
+
+                <div>
+
+                    <div class="relative translate-x-[-50%]">
+
+                        <div class="w-8 h-8"></div>
+                        <input id="volume_slider" class="absolute accent-pink rotate-270 translate-x-[-50%] translate-y-[50%] mt-15 mt-5 hover:cursor-pointer" type="range" orient="vertical" min="0" max="100"  step="1">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="flex h-min gap-2">
+                <p>Lives:</p>
+                <p id="lives">3</p>
+            </div>
+
+        </div>
 
     </div>
 
@@ -74,7 +110,7 @@
 
     </div>
 
-   
+
 
     {{-- <div class="bg-white text-xl border border-b-0">
 
@@ -87,10 +123,10 @@
 
     {{-- <input id="guess_input" class="bg-white h-[60px] w-full border px-5 text-xl" placeholder="Guess a song" type="text" /> --}}
 
-  
-    <div class="relative flex flex-col mx-auto w-[1000px] mt-auto mb-8"> 
 
-        <div id="autocomplete_container" class="relative absolute bottom-full bg-white text-xl border border-b-0 w-full z-10 hidden">
+    <div class="relative flex flex-col mx-auto w-[1000px] mt-auto mb-8">
+
+        <div id="autocomplete_container" class="absolute bottom-full bg-white text-xl border border-b-0 w-full z-10 hidden">
 
             <div id="autocomplete_results" class="hidden">
 
@@ -104,7 +140,10 @@
                 <x-suggested-song-placeholder>w</x-suggested-song-placeholder>
                 <x-suggested-song-placeholder>w</x-suggested-song-placeholder>
                 <x-suggested-song-placeholder>w</x-suggested-song-placeholder>
-        
+                <x-suggested-song-placeholder>w</x-suggested-song-placeholder>
+                <x-suggested-song-placeholder>w</x-suggested-song-placeholder>
+
+
             </div>
 
             <div id="loader_container" class="absolute w-full flex justify-center top-[50%] translate-y-[-50%] hidden">
@@ -115,30 +154,30 @@
                 </svg>
 
             </div>
-           
-    
-        </div> 
-    
+
+
+        </div>
+
         <input id="guess_input" class="bg-white h-[60px] w-full border px-5 text-xl" placeholder="Guess a song" type="text" />
-       
+
         <div class="mx-auto mt-4">
             <button id="guess_button" class="text-white text-2xl bg-pink px-6 py-3 rounded-lg w-min hover:bg-pink-300 hover:cursor-pointer duration-200">
                 Guess
             </button>
         </div>
-      
+
     </div>
-    
+
     <div class="absolute left-0 top-0 blur-[300px] translate-x-[-90%] translate-y-[-50%] -z-10">
-        <img id="left_album_cover" class="w-150" src="" 
+        <img id="left_album_cover" class="w-150" src=""
         alt="{{ Vite::asset('resources/images/album_cover_placeholder.png') }}"
         >
     </div>
-    
+
     <div class="absolute right-0 bottom-0 blur-[300px] translate-x-[90%] translate-y-[50%] -z-10">
-        <img id="right_album_cover" class="w-150 h-150" src="" 
+        <img id="right_album_cover" class="w-150 h-150" src=""
         alt="{{ Vite::asset('resources/images/album_cover_placeholder.png') }}"
         >
     </div>
-   
+
 </x-layout>
