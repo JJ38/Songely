@@ -1,3 +1,6 @@
+import Cookies from 'js-cookie';
+
+
 const playPauseButton = document.getElementById('play_pause_button');
 const skipStartButton = document.getElementById('skip_start_button');
 const lockedButton = document.getElementById('locked_button');
@@ -59,6 +62,7 @@ let mute = false;
 let volume = 50;
 
 
+let sessionKey = null;
 let songTime = 1; //set to 1 not 0 to stop jumping at the start
 let sliderPos = 0;
 let sliderDown = false;
@@ -75,6 +79,9 @@ let songOffset = 0;
 
 let soundcloud;
 let lastGuessInputEpoch = 0;
+
+
+const referer = "localhost";
 
 const songUrl = "https://soundcloud.com/postmalone/post-malone-something-real";
 // const songUrl = "https://soundcloud.com/shaboozey/in-da-club";
@@ -262,10 +269,38 @@ function addEventListeners(){
 }
 
 
-
 async function startGame(){
 
-    //get song
+    await fetch("http://localhost/sanctum/csrf-cookie",{
+
+        method: "GET",
+        headers: {
+            "Accept": "application/json",
+            "Referer": referer
+        }
+
+    });
+
+    const xsrf = Cookies.get('XSRF-TOKEN');
+
+    const response = await fetch('http://' + window.location.host + '/api/v1/startgame',{
+
+        method: "POST",
+        headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Referer": referer,
+            'X-XSRF-TOKEN': xsrf
+        },
+        body: JSON.stringify({
+            'email': 'test@example.com',
+            'password': 'password'
+         }),
+
+    });
+
+    console.log(await response.json())
+
     const song = await fetchSong();
 
     if(song == null){
@@ -280,17 +315,33 @@ async function startGame(){
 
 async function fetchSong(){
 
-    const url =  window.location.href + "api/v1/getsong";
+    // const url =  window.location.href + "api/v1/getsong";
+
+    const url = 'http://' + window.location.host + '/api/v1/getsong';
+    // const url = window.location.href + 'api/v1/getsong';
+
 
     try {
 
-        const response = await fetch(url);
+        //const response = await axios.get(url);
 
-        if (!response.ok) {
+
+        const response = await fetch('http://' + window.location.host + '/api/v1/getsong',{
+
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Referer": referer
+            }
+
+        });
+
+        if (!response.status) {
             throw new Error(`Response status: ${response.status}`);
         }
 
         const json = await response.json();
+
         console.log(json);
 
         return json;
@@ -326,6 +377,7 @@ function parseSong(json){
 function loadSong(song){
 
     //initialise soundcloud
+
     initialiseSoundcloud(getIframeURL(song['id']));
     loadAlbumCover(song['albumCover']);
 
@@ -466,7 +518,7 @@ function incrementSongTime(){
 function setSongTime(timeMs){
 
     songTime = timeMs;
-    console.log("songTime: " + songTime);
+    //console.log("songTime: " + songTime);
     // console.log("greatestSongTime: " + greatestSongTime);
 
     if(songTime > songLengthMs){
@@ -502,9 +554,6 @@ function setSongTime(timeMs){
 
 
 function togglePlayback(){
-
-
-    console.log("greatestSongTime: " + greatestSongTime);
 
     if(!soundcloudReady){
         return;
@@ -620,7 +669,6 @@ function updateSlidebar(sliderPos){
 
 function toggleMute(){
 
-    console.log('toggle mute');
     mute = !mute;
 
     console.log(mute);
@@ -644,15 +692,12 @@ function setVolume(){
         return;
     }
 
-    console.log("setvolume: " + volume);
     soundcloud.setVolume(volume);
 
 }
 
 
 async function guessAutocomplete(input){
-
-    console.log(input);
 
     const autocompleteURL = "https://ws.audioscrobbler.com/2.0/?method=track.search&track=" + input + "&api_key=" + lastFMKey + "&format=json&limit=8";
     const response = await fetch(autocompleteURL);
@@ -680,7 +725,7 @@ function parseAutocomplete(json){
 
 
 function createAutocompleteElement(trackData){
-    console.log(trackData);
+
     const div = document.createElement('div');
     div.classList = "px-5 py-2 hover:bg-gray-200 hover:cursor-pointer duration-200";
     div.innerText =  trackData['artist'] + " - " + trackData['name'];
@@ -721,20 +766,30 @@ function clearAutoComplete(){
 
 }
 
-function submitGuess(){
+async function submitGuess(){
 
     const guess = guessInput.value;
     console.log(guess);
 
-    fetch(window.location.href + 'api/v1/guess', {
+    const url = 'http://' + window.location.host + '/api/v1/guess';
+    // const url = window.location.href + 'api/v1/guess';
+    const xsrf = Cookies.get('XSRF-TOKEN');
+
+    const response = await fetch(url,{
+
         method: "POST",
-        body: JSON.stringify({
-          guess: guess,
-        }),
         headers: {
-          "Content-type": "application/json; charset=UTF-8"
-        }
-    }).then((response) => response.json())
-    .then((json) => console.log(json));
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Referer": referer,
+            "X-XSRF-TOKEN": xsrf
+        },
+        body: JSON.stringify({
+            'guess': guess,
+        }),
+
+    });
+
+    console.log(await response.json());
 
 }

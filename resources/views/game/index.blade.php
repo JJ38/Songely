@@ -9,9 +9,15 @@
 
     <div class="flex justify-center">
 
-        <div class="flex h-min mt-auto mr-5 gap-2">
-            <p>Score:</p>
-            <p id="score">0</p>
+        <div class="flex flex-col justify-between ml-5 mt-4">
+
+            <div>Song: 1/3</div>
+
+            <div class="flex h-min mt-auto mr-5 gap-2">
+                <p>Score:</p>
+                <p id="score">0</p>
+            </div>
+
         </div>
 
         <div class="w-[320px] h-[390px] bg-white rounded-xl pt-8 border drop-shadow-xl/25">
@@ -161,6 +167,7 @@
         <input id="guess_input" class="bg-white h-[60px] w-full border px-5 text-xl" placeholder="Guess a song" type="text" />
 
         <div class="mx-auto mt-4">
+            @csrf
             <button id="guess_button" class="text-white text-2xl bg-pink px-6 py-3 rounded-lg w-min hover:bg-pink-300 hover:cursor-pointer duration-200">
                 Guess
             </button>

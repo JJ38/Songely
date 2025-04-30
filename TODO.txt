@@ -1,2 +1,5 @@
--make api endpoint to fetch songs from
 -sign in and register
+
+when clicks ready guest authorise user.
+use token to keep track of guesses
+authorise guess and getsong routes
