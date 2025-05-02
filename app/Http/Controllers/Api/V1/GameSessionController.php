@@ -12,27 +12,15 @@ class GameSessionController extends Controller
 
     public function store(Request $request){
 
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
+        $request->session()->regenerate();
+
+        session([
+            'songNumber' => 1,
+            'guessCount' => 0
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-
-            session([
-                'test' => 'session variable abcdefg',
-                'guessCount' => 0
-            ]);
-
-            return response()->json([
-                'message' => $request->session()->get('test'),
-                'user' => Auth::user()
-            ]);
-        }
-
-        throw ValidationException::withMessages([
-            'email' => __('The provided credentials do not match our records.'),
+        return response()->json([
+            'message' => $request->session()->get('test'),
         ]);
 
     }

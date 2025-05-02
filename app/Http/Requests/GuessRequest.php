@@ -23,7 +23,7 @@ class GuessRequest extends FormRequest
     {
         return [
             'guess' => 'required',
-            // 'csrf' => 'required'
+            'score' => ''
         ];
     }
 }

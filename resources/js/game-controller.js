@@ -1,10 +1,21 @@
 import Cookies from 'js-cookie';
 
+const gameContainer = document.getElementById('game_container')
+
+const roundEndWidget = document.getElementById('round_end_widget');
+
+const widgetSongTitle = document.getElementById('widget_song_title');
+const widgetSongArtist = document.getElementById('widget_song_artist');
+const widgetSongScore = document.getElementById('widget_song_score');
+const nextRoundButton = document.getElementById('next_round_button');
+const endGameButton = document.getElementById('end_game_button');
+
 
 const playPauseButton = document.getElementById('play_pause_button');
 const skipStartButton = document.getElementById('skip_start_button');
 const lockedButton = document.getElementById('locked_button');
 const readyButton = document.getElementById('ready_button');
+const readyButtonWrapper = document.getElementById('ready_button_wrapper');
 
 const muteButton = document.getElementById('mute_button_container');
 const volumeSlider = document.getElementById('volume_slider');
@@ -35,10 +46,9 @@ const autocompleteResults = document.getElementById('autocomplete_results');
 const loaderContainer = document.getElementById('loader_container');
 const placeholderAutocompleteInputs = document.getElementById('placeholder_autocomplete_inputs');
 
-const iframeElement = document.getElementById('sc-widget');
 const guessButton = document.getElementById('guess_button');
 
-const score = document.getElementById('score');
+const userScore = document.getElementById('score');
 
 const startingBlurAmount = 40; //px
 const lengthOfBlurMilliseconds = 20000;
@@ -47,48 +57,42 @@ const lengthOfSliderBar = 900;
 const lastFMKey = "aa937b96944a6e3f01b961d9557c641a";
 const autoCompleteDebounce = 1000;
 
-let songLengthMs = 30000;
-let totalSongLength
+let song = null;
 
+let songLengthMs = 30000;
 let scaleFactor = songLengthMs / lengthOfSliderBar;
 
-let playbackController;
-let pausePlayMutex = false;
+
 let isPaused = true;
 let isLocked = false;
-let queuedPlaybackStateChange = false;
 let timer;
 let mute = false;
 let volume = 50;
 
-
-let sessionKey = null;
+let iframe;
 let songTime = 1; //set to 1 not 0 to stop jumping at the start
 let sliderPos = 0;
 let sliderDown = false;
 let sliderDownPos = false;
 let sliderInitialPos = 0;
 let lengthOfRevealedBar = 0;
+let currentScore = 3000;
 
-let startTime;
+let lives = 3;
+
+
 let greatestSongTime = 0;
 
 let soundcloudReady = false;
-let hasntBuffered = true;
-let songOffset = 0;
+let soundcloudInitialised = false;
 
 let soundcloud;
+let soundcloudBackground;
 let lastGuessInputEpoch = 0;
 
+let autocompleteGuess;
 
 const referer = "localhost";
-
-const songUrl = "https://soundcloud.com/postmalone/post-malone-something-real";
-// const songUrl = "https://soundcloud.com/shaboozey/in-da-club";
-// const songUrl = "https://api.soundcloud.com/tracks/302151081";
-
-//737896987
-//what-do-you-mean
 
 //use widget for audio
 //https://api-widget.soundcloud.com/resolve?url=https%3A//api.soundcloud.com/tracks/1071204931&format=json&client_id=gqKBMSuBw5rbN9rDRYPqKNvF17ovlObu
@@ -198,6 +202,8 @@ function addEventListeners(){
 
         readyButton.addEventListener('click', () => {
             readyButton.classList.add("hidden");
+            readyButtonWrapper.classList.add("hidden");
+            gameContainer.classList.remove('hidden');
             playbackButtonWrapper.classList.remove("hidden");
             startGame();
         });
@@ -266,6 +272,22 @@ function addEventListeners(){
 
     }
 
+    if(nextRoundButton != null){
+
+        nextRoundButton.addEventListener('click', () => {
+
+            console.log("nextroundbutton");
+            roundEndWidget.classList.add('hidden');
+            document.body.removeChild(soundcloudBackground);
+            resetGameState();
+
+            loadSong();
+
+
+        });
+
+    }
+
 }
 
 
@@ -299,34 +321,66 @@ async function startGame(){
 
     });
 
-    console.log(await response.json())
-
-    const song = await fetchSong();
-
-    if(song == null){
-        alert("error loading song.")
-        return;
+    if(!response.ok){
+        alert("error starting game");
     }
 
-    loadSong(song);
+    await startRound();
+    loadSong();
+
+}
+
+
+
+async function startRound(){
+
+    soundcloudReady = false;
+
+    song = await fetchSong();
+    console.log(song);
+    if(song == null){
+        alert("error loading song.")
+        return false;
+    }
+
+    return true;
+
+}
+
+
+function resetGameState(){
+
+    console.log("resetgamestate");
+
+    songTime = 0;
+    greatestSongTime = 0;
+    sliderPos = 0;
+    lengthOfRevealedBar = 0;
+    isPaused= true;
+
+    mainAlbumCover.classList.add('hidden');
+    leftAlbumCover.classList.add('hidden');
+    rightAlbumCover.classList.add('hidden');
+
+    playIcon.classList.remove('hidden');
+    pauseIcon.classList.add('hidden');
+    playPauseButton.classList.remove('bg-white', "hover:bg-pink", "hover:fill-white");
+
+    updateScore(3000);
+    updateSliderPosition(sliderPos)
+    updateSlidebar(sliderPos, true);
+    updateAlbumBlur();
 
 }
 
 
 async function fetchSong(){
 
-    // const url =  window.location.href + "api/v1/getsong";
-
     const url = 'http://' + window.location.host + '/api/v1/getsong';
-    // const url = window.location.href + 'api/v1/getsong';
-
 
     try {
 
-        //const response = await axios.get(url);
-
-
-        const response = await fetch('http://' + window.location.host + '/api/v1/getsong',{
+        const response = await fetch(url,{
 
             method: "GET",
             headers: {
@@ -357,33 +411,19 @@ async function fetchSong(){
 }
 
 
-function parseSong(json){
-
-    console.log
-
-    const song = {
-
-        id: json['id'],
-        title: json['title'],
-        albumCover: json['albumcover']
-
-    }
-
-    return song;
-
-}
-
-
-function loadSong(song){
-
-    //initialise soundcloud
+function loadSong(){
 
     initialiseSoundcloud(getIframeURL(song['id']));
-    loadAlbumCover(song['albumCover']);
+    soundcloudInitialised = true;
 
 }
 
+
 function loadAlbumCover(albumCoverURL){
+
+    mainAlbumCover.classList.remove('hidden');
+    leftAlbumCover.classList.remove('hidden');
+    rightAlbumCover.classList.remove('hidden');
 
     if(albumCoverURL != null){
 
@@ -399,25 +439,26 @@ function loadAlbumCover(albumCoverURL){
 
 function initialiseSoundcloud(songUrl){
 
-    const iframe = document.createElement('iframe');
-    iframe.id = "sc-widget";
+    iframe = document.createElement('iframe');
+    iframe.id = Date.now();
     iframe.src = songUrl;
     iframe.allow = "autoplay";
     iframe.classList.add("hidden");
+    iframe.loading = "eager";
 
     document.body.appendChild(iframe);
     soundcloud = SC.Widget(iframe);
 
     soundcloud.bind(SC.Widget.Events.READY, function() {
 
-        soundcloud.bind(SC.Widget.Events.PAUSE, soundcloudPaused);
+        soundcloud.bind(SC.Widget.Events.PAUSE, () => {console.log("soundcloud paused")});
         soundcloud.getDuration((value) => {console.log(value)});
         soundcloud.bind(SC.Widget.Events.FINISH, soundcloudFinished);
 
         //buffer and play song in background to stop jumping at the start
         setTimeout(() => {
             bufferSong();
-        }, 1000);
+        }, 800);
 
     });
 
@@ -435,19 +476,28 @@ function bufferSong(){
 
         soundcloud.pause();
         soundcloudIsReady();
+
         setTimeout(() => {
+
+            soundcloud.seekTo(0);
             soundcloud.setVolume(volume);
+
         }, 200);
-    }, 1000);
+
+    }, 800);
 
 }
+
 
 function soundcloudIsReady(){
 
+    console.log("soundcloud is ready");
     soundcloudReady = true;
+    loadAlbumCover(song['albumCover']);
     playPauseButton.classList.add('bg-white','hover:bg-pink', 'hover:fill-white');
 
 }
+
 
 function getIframeURL(id){
 
@@ -457,26 +507,14 @@ function getIframeURL(id){
 }
 
 
-function soundcloudPaused(){
-
-    console.log("soundcloud paused");
-
-
-    setTimeout(() => {
-        soundcloud.seekTo(0);
-    }, 200);
-
-}
-
-
 function soundcloudFinished(){
 
+    console.log("soundcloud fin");
+    updateScore(0);
     togglePlayback();
     updateSlidebar(lengthOfSliderBar);
 
 }
-
-
 
 
 function startTimer(){
@@ -498,7 +536,7 @@ function stopTimer(){
 function incrementSongTime(){
 
     soundcloud.getPosition((value) => {
-        // console.log("soundcloudTime: " + value);
+        //console.log("soundcloudTime: " + value);
 
         setSongTime(value);
 
@@ -522,6 +560,7 @@ function setSongTime(timeMs){
     // console.log("greatestSongTime: " + greatestSongTime);
 
     if(songTime > songLengthMs){
+        console.log("songTime > songlenthms");
         songTime = songLengthMs;
         togglePlayback();
     }
@@ -539,10 +578,11 @@ function setSongTime(timeMs){
         }
 
         greatestSongTime = songTime;
-        updateScore();
         updateAlbumBlur();
+        updateScore();
 
     }
+
 
     const percentageOfSong = songTime / songLengthMs;
     const sliderPos = percentageOfSong * lengthOfSliderBar;
@@ -556,10 +596,9 @@ function setSongTime(timeMs){
 function togglePlayback(){
 
     if(!soundcloudReady){
+        console.log("!soundcloudReady");
         return;
     }
-
-    pausePlayMutex = true;
 
     isPaused = !isPaused;
 
@@ -593,6 +632,7 @@ function togglePlayback(){
     }
 
 }
+
 
 function togglePlaybackState(){
 
@@ -637,10 +677,17 @@ function updateAlbumBlur(){
 
 }
 
-function updateScore(){
 
-    const newScore = parseInt((songLengthMs - greatestSongTime)/10);
-    score.innerText = newScore;
+function updateScore(score){
+
+
+    if(score == null){
+        currentScore = parseInt((songLengthMs - greatestSongTime)/10)
+    }else{
+        currentScore = score;
+    }
+
+    userScore.innerText = currentScore;
 
 }
 
@@ -652,10 +699,10 @@ function updateSliderPosition(sliderPos){
 }
 
 
-function updateSlidebar(sliderPos){
+function updateSlidebar(sliderPos, resettingRound){
 
     //are we the further into the song then at any point previously
-    if(songTime == greatestSongTime){
+    if(songTime == greatestSongTime || resettingRound){
 
         revealedBar.style.width = sliderPos + "px";
         lengthOfRevealedBar = sliderPos;
@@ -708,6 +755,7 @@ async function guessAutocomplete(input){
 
 }
 
+
 function parseAutocomplete(json){
 
     const trackArray = json["results"]["trackmatches"]["track"];
@@ -727,12 +775,14 @@ function parseAutocomplete(json){
 function createAutocompleteElement(trackData){
 
     const div = document.createElement('div');
-    div.classList = "px-5 py-2 hover:bg-gray-200 hover:cursor-pointer duration-200";
-    div.innerText =  trackData['artist'] + " - " + trackData['name'];
+    div.classList = "flex px-5 py-2 hover:bg-gray-200 hover:cursor-pointer duration-200";
+    div.innerText = trackData['artist'] + " - " + trackData['name'];
 
     div.addEventListener(('click'), () => {
 
         guessInput.value = div.innerText;
+        autocompleteGuess = {artist: trackData["artist"], title: trackData["name"]};
+        console.log(autocompleteGuess);
         clearAutoComplete();
 
     });
@@ -741,6 +791,7 @@ function createAutocompleteElement(trackData){
 
 }
 
+
 function showAutoCompleteResults(){
 
     loaderContainer.classList.add('hidden');
@@ -748,6 +799,7 @@ function showAutoCompleteResults(){
     autocompleteResults.classList.remove('hidden');
 
 }
+
 
 function showAutoCompleteLoader(){
 
@@ -759,6 +811,7 @@ function showAutoCompleteLoader(){
 
 }
 
+
 function clearAutoComplete(){
 
     autocompleteResults.innerHTML = "";
@@ -766,13 +819,26 @@ function clearAutoComplete(){
 
 }
 
+
 async function submitGuess(){
 
-    const guess = guessInput.value;
-    console.log(guess);
+    if(guessInput.value.length == 0){
+        return;
+    }
+
+    if(autocompleteGuess == null){
+        alert("please select a guess from the suggested guesses");
+        return;
+    }
+
+    if(guessInput.value != (autocompleteGuess['artist'] + " - " + autocompleteGuess['title'])){
+        alert("please select a guess from the suggested guesses");
+        return;
+    }
+
+    const guess = autocompleteGuess;
 
     const url = 'http://' + window.location.host + '/api/v1/guess';
-    // const url = window.location.href + 'api/v1/guess';
     const xsrf = Cookies.get('XSRF-TOKEN');
 
     const response = await fetch(url,{
@@ -786,10 +852,81 @@ async function submitGuess(){
         },
         body: JSON.stringify({
             'guess': guess,
+            'score': currentScore
         }),
 
     });
 
-    console.log(await response.json());
+    clearAutoComplete();
+    guessInput.value = "";
+    autocompleteGuess = null;
+
+    const json = await response.json();
+    console.log(json);
+    checkGuessResult(json);
+
+}
+
+
+function checkGuessResult(json){
+
+    const isGuessCorrect = json['correctGuess'];
+
+    if(!isGuessCorrect){
+        incorrectGuess(json['guessCount'], json);
+        return;
+    }
+
+    correctGuess(json);
+
+    console.log("correct!");
+}
+
+
+function correctGuess(json){
+
+    if(json['songNumber'] == 3){
+
+    }
+
+    showRoundEndWidget(json);
+
+}
+
+
+function incorrectGuess(guessCount, json){
+
+    //handle incorrect guess
+    console.log("incorrect");
+
+    if((lives - guessCount) == 0){
+
+        console.log("Out Of Lives");
+        showRoundEndWidget(json);
+
+    }
+
+}
+
+
+function showRoundEndWidget(json){
+
+    stopTimer();
+
+    widgetSongTitle.innerText = json['correctTitle'];
+    widgetSongArtist.innerText = json['correctArtist'];
+    widgetSongScore.innerText = json['score'];
+
+    // if(gameOver){
+    //     endGameButton.classList.remove('hidden');
+    //     nextRoundButton.classList.add('hidden');
+    // }
+
+    // roundEndWidget
+
+    roundEndWidget.classList.remove('hidden');
+
+    soundcloudBackground = iframe;
+    startRound();
 
 }

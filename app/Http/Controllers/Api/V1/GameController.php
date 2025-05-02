@@ -24,15 +24,17 @@ class GameController extends Controller
         $song->albumCover = str_replace('-large.', '-t500x500.', $song->albumCover);
         // session(['test' => 'wadawd']);
 
-        $sessionVariable = session()->get('test');
+        $request->session()->increment('songNumber');
+        session([
+            'songToGuess' => $song
+        ]);
 
 
         return response()->json([
             'id' => $song->id,
             'title' => $song->title,
+            'artist' => $song->artist,
             'albumCover' => $song->albumCover,
-            'message' => $sessionVariable,
-            'user' => Auth::user()
         ], 200);
 
     }
@@ -40,18 +42,37 @@ class GameController extends Controller
     public function store(GuessRequest $request){
 
         $guess = $request->get('guess');
-
-        $sessionData = session('test');
-
-        // Auth::user()->email;
+        $songToGuess = session()->get('songToGuess');
         $request->session()->increment('guessCount');
-        $guessCount = $request->session()->get('guessCount');
+
+
+
+        if(!(strtolower($songToGuess['title']) == strtolower($guess['title'])) || !(strtolower($songToGuess['artist']) == strtolower($guess['artist']))){
+            //incorrect guess
+
+            return response()->json([
+                'correctGuess' =>  false,
+                'roundEnd' => $request->session()->get('guessCount') >= 3,
+                'anotherRound' => $request->session()->get('songNumber') >= 3,
+                'guessCount' => $request->session()->get('guessCount'),
+                'songNumber' => $request->session()->get('songNumber'),
+            ]);
+
+        }
+
+        //correct guess
+
+
 
         return response()->json([
-            'correct_guess' =>  true,
+            'correctGuess' =>  true,
             'message' => $guess,
-            'guessCount' => $guessCount,
-            'sessionData' => $sessionData
+            'guessCount' => $request->session()->get('guessCount'),
+            'songToGuess' => $songToGuess,
+            'correctArtist' => $songToGuess['artist'],
+            'correctTitle' => $songToGuess['title'],
+            'score' =>  $request->get('score'),
+            'songNumber' => $request->session()->get('songNumber')
         ]);
     }
 
