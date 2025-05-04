@@ -15,8 +15,9 @@ class GameSessionController extends Controller
         $request->session()->regenerate();
 
         session([
-            'songNumber' => 1,
-            'guessCount' => 0
+            'songNumber' => 0,
+            'guessCount' => 0,
+            'overallScore' => 0
         ]);
 
         return response()->json([

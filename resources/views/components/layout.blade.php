@@ -12,20 +12,24 @@
     @endforeach
 
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
-   
+
     @vite(['resources/js/app.js', 'resources/css/app.css', 'resources/js/game-controller.js'])
 
     <title>Songely</title>
-    
+
 </head>
 <body class="flex flex-col bg-lightgray font-hanken-grotesk min-h-screen overflow-hidden">
-    <nav class="flex justify-end pt-7 px-12">
+    <nav class="flex justify-between pt-7 px-12">
+
+        <div>
+            <x-button id="home_button" class="hidden">Home</x-button>
+        </div>
 
         <div class="flex gap-7">
             <x-button href="/register">Register</x-button>
             <x-button href="/login">Log In</x-button>
         </div>
-        
+
     </nav>
     <main class="flex flex-col flex-1">
         {{ $slot }}

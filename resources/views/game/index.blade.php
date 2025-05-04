@@ -7,28 +7,90 @@
 
     <script src="https://w.soundcloud.com/player/api.js" type="text/javascript"></script>
 
-    <div id="ready_button_wrapper" class="m-auto">
-        <button id="ready_button" class="text-white text-2xl bg-pink px-6 py-3 rounded-lg hover:bg-pink-300 hover:cursor-pointer duration-200">
-            Ready
-        </button>
+    <div id="menu" class="m-auto justify-center">
+
+        <h1 class="text-6xl font-bold">Guess the song by hearing as little as possible</h1>
+
+        <div class="mt-20 flex gap-10 justify-center">
+
+            <div id="ready_button_wrapper">
+                <button id="ready_button" class="w-50 text-white text-3xl bg-pink px-6 py-3 rounded-lg hover:bg-pink-300 hover:cursor-pointer duration-200">
+                    Daily
+                </button>
+            </div>
+
+            <div id="ready_button_wrapper">
+                <button id="unlimited_button" class="w-50 text-white text-3xl bg-pink px-6 py-3 rounded-lg hover:bg-pink-300 hover:cursor-pointer duration-200">
+                    Unlimited
+                </button>
+            </div>
+        </div>
+
+
     </div>
+
 
     <div id="game_container" class="hidden relative flex flex-col flex-1">
 
         <div id="round_end_widget" class="hidden absolute flex flex-col items-center bg-white w-100 h-150 border rounded-xl z-20 right-[50%] translate-x-[50%] py-10 px-6">
 
-            <h2 class="text-5xl font-bold">Correct!</h2>
+            <h2 id="widget_title" class="text-5xl font-bold"></h2>
 
             <img id="round_end_widget" src="" alt="">
 
-            <p id="widget_song_title">Song Title</p>
-            <p id="widget_song_artist">Song Artist</p>
+            <p id="widget_song_title">Score</p>
+            <p id="widget_song_artist">Score</p>
             <p id="widget_song_score">Score</p>
 
             <div>
                 <button id="next_round_button" class="text-white text-2xl bg-pink px-6 py-3 rounded-lg hover:bg-pink-300 hover:cursor-pointer duration-200">
                     Next Round
                 </button>
+            </div>
+
+        </div>
+
+        <div id="game_end_widget" class="hidden absolute flex flex-col items-center bg-white w-100 h-150 border rounded-xl z-20 right-[50%] translate-x-[50%] py-10 px-6">
+
+            <h2 class="text-5xl font-bold">Game Over</h2>
+
+            <img id="game_widget" src="" alt="">
+
+            <p id="game_widget_title">Song Title</p>
+
+            <div id="game_overall_score">
+                <p id="game_widget_score"></p>
+                <p>/10000</p>
+            </div>
+
+            <div class="w-full flex flex-col items-center">
+
+                <div class="flex">
+                    <p id="game_song_1">Song Artist</p>
+                    <div class="flex">
+                        <p id="game_widget_score"></p>
+                        <p>/3000</p>
+                    </div>
+                </div>
+
+                <div class="flex">
+                    <p id="game_song_2">Song Artist</p>
+                    <div class="flex">
+                        <p id="game_widget_score"></p>
+                        <p>/3000</p>
+                    </div>
+                </div>
+
+                <div class="flex">
+                    <p id="game_song_3">Song Artist</p>
+                    <div class="flex">
+                        <p id="game_widget_score"></p>
+                        <p>/3000</p>
+                    </div>
+                </div>
+
+
+                <p>+ 1000 accuracy bonus</p>
             </div>
 
             <div>
@@ -43,7 +105,10 @@
 
             <div class="flex flex-col justify-between items-end mr-5 mt-4 flex-1">
 
-                <div>Song: 1/3</div>
+                <div class="flex h-min gap-2">
+                    <p>Song:</p>
+                    <p id="song_number">1/3</p>
+                </div>
 
                 <div class="flex h-min mt-auto gap-2">
                     <p>Score:</p>
@@ -66,7 +131,7 @@
 
                     <div class="mt-8 h-[70px]">
 
-                        <div id="playback_button_wrapper" class="flex justify-between items-center hidden">
+                        <div id="playback_button_wrapper" class="flex justify-between items-center">
 
                             <x-circle-button id="skip_start_button" class="w-[50px] h-[50px] bg-white hover:bg-pink hover:fill-white hover:cursor-pointer duration-200">
                                 <svg class="w-6 h-6 my-auto rotate-180" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M52.5 440.6c-9.5 7.9-22.8 9.7-34.1 4.4S0 428.4 0 416L0 96C0 83.6 7.2 72.3 18.4 67s24.5-3.6 34.1 4.4l192 160L256 241l0-145c0-17.7 14.3-32 32-32s32 14.3 32 32l0 320c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-145-11.5 9.6-192 160z"/></svg>
@@ -123,9 +188,9 @@
 
                 </div>
 
-                <div class="flex h-min gap-2">
+                <div class="flex h-min mt-auto gap-2">
                     <p>Lives:</p>
-                    <p id="lives">3</p>
+                    <p id="lives">3/3</p>
                 </div>
 
             </div>

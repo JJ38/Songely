@@ -9,11 +9,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
 
-    Route::get('/getsong', [GameController::class, 'index']);
-    Route::post('/guess', [GameController::class, 'store']);
-
-    Route::post('/startgame', [GameSessionController::class, 'store']);
-
+    Route::get('/daily/getsong', [GameController::class, 'index']);
+    Route::post('/daily/guess', [GameController::class, 'store']);
+    Route::post('/daily/startgame', [GameSessionController::class, 'store']);
 
     // Route::get('/getsong', [GameController::class, 'index']);
     // Route::post('/guess', [GameController::class, 'store']);

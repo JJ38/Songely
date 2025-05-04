@@ -1,6 +1,8 @@
 import Cookies from 'js-cookie';
 
-const gameContainer = document.getElementById('game_container')
+const menu = document.getElementById('menu');
+const gameContainer = document.getElementById('game_container');
+const homeButton = document.getElementById('home_button');
 
 const roundEndWidget = document.getElementById('round_end_widget');
 
@@ -9,12 +11,19 @@ const widgetSongArtist = document.getElementById('widget_song_artist');
 const widgetSongScore = document.getElementById('widget_song_score');
 const nextRoundButton = document.getElementById('next_round_button');
 const endGameButton = document.getElementById('end_game_button');
+const widgetTitle = document.getElementById('widget_title');
 
+const gameWidget = document.getElementById('game_end_widget');
+const gameWidgetScore = document.getElementById('game_widget_score');
+const gameWidgetSong1 = document.getElementById('game_song_1');
+const gameWidgetSong2 = document.getElementById('game_song_2');
+const gameWidgetSong3 = document.getElementById('game_song_3');
 
 const playPauseButton = document.getElementById('play_pause_button');
 const skipStartButton = document.getElementById('skip_start_button');
 const lockedButton = document.getElementById('locked_button');
-const readyButton = document.getElementById('ready_button');
+const dailyButton = document.getElementById('ready_button');
+const unlimitedButton = document.getElementById('unlimited_button');
 const readyButtonWrapper = document.getElementById('ready_button_wrapper');
 
 const muteButton = document.getElementById('mute_button_container');
@@ -49,6 +58,8 @@ const placeholderAutocompleteInputs = document.getElementById('placeholder_autoc
 const guessButton = document.getElementById('guess_button');
 
 const userScore = document.getElementById('score');
+const userLives = document.getElementById('lives');
+const userSong = document.getElementById('song_number');
 
 const startingBlurAmount = 40; //px
 const lengthOfBlurMilliseconds = 20000;
@@ -57,12 +68,13 @@ const lengthOfSliderBar = 900;
 const lastFMKey = "aa937b96944a6e3f01b961d9557c641a";
 const autoCompleteDebounce = 1000;
 
+
 let song = null;
 
 let songLengthMs = 30000;
 let scaleFactor = songLengthMs / lengthOfSliderBar;
 
-
+let gamemode;
 let isPaused = true;
 let isLocked = false;
 let timer;
@@ -79,7 +91,7 @@ let lengthOfRevealedBar = 0;
 let currentScore = 3000;
 
 let lives = 3;
-
+let noOfSongs = 3;
 
 let greatestSongTime = 0;
 
@@ -102,6 +114,13 @@ const playbackState = {
 
     REVEAL: 0,
     DONT_REVEAL: 1
+
+}
+
+const gameMode = {
+
+    DAILY: 0,
+    UNLIMITED: 1
 
 }
 
@@ -198,13 +217,27 @@ function addEventListeners(){
 
     }
 
-    if(readyButton != null){
+    if(dailyButton != null){
 
-        readyButton.addEventListener('click', () => {
-            readyButton.classList.add("hidden");
-            readyButtonWrapper.classList.add("hidden");
-            gameContainer.classList.remove('hidden');
-            playbackButtonWrapper.classList.remove("hidden");
+        dailyButton.addEventListener('click', () => {
+
+            showGameUI();
+
+            // playbackButtonWrapper.classList.remove("hidden");
+            gamemode = gameMode.DAILY;
+            startGame();
+        });
+
+    }
+
+    if(unlimitedButton != null){
+
+        unlimitedButton.addEventListener('click', () => {
+
+            showGameUI();
+
+            // playbackButtonWrapper.classList.remove("hidden");
+            gamemode = gameMode.UNLIMITED;
             startGame();
         });
 
@@ -279,10 +312,20 @@ function addEventListeners(){
             console.log("nextroundbutton");
             roundEndWidget.classList.add('hidden');
             document.body.removeChild(soundcloudBackground);
+            updateSongNumber(song['songNumber']);
             resetGameState();
-
             loadSong();
 
+        });
+
+    }
+
+    if(homeButton != null){
+
+        homeButton.addEventListener('click', () => {
+
+            hideGameUI();
+            showMenuUI();
 
         });
 
@@ -290,6 +333,31 @@ function addEventListeners(){
 
 }
 
+
+function showGameUI(){
+
+    menu.classList.add('hidden');
+    gameContainer.classList.remove('hidden');
+    homeButton.classList.remove('hidden');
+
+}
+
+
+function hideGameUI(){
+
+    menu.classList.add('hidden');
+    gameContainer.classList.remove('hidden');
+    homeButton.classList.remove('hidden');
+
+}
+
+function showMenuUI(){
+
+    menu.classList.remove('hidden');
+    gameContainer.classList.add('hidden');
+    homeButton.classList.add('hidden');
+
+}
 
 async function startGame(){
 
@@ -305,7 +373,17 @@ async function startGame(){
 
     const xsrf = Cookies.get('XSRF-TOKEN');
 
-    const response = await fetch('http://' + window.location.host + '/api/v1/startgame',{
+    if(gamemode == gameMode.DAILY){
+        startDailyGame(xsrf);
+    }
+
+}
+
+
+
+async function startDailyGame(xsrf){
+
+    const response = await fetch('http://' + window.location.host + '/api/v1/daily/startgame',{
 
         method: "POST",
         headers: {
@@ -337,6 +415,7 @@ async function startRound(){
     soundcloudReady = false;
 
     song = await fetchSong();
+
     console.log(song);
     if(song == null){
         alert("error loading song.")
@@ -366,6 +445,7 @@ function resetGameState(){
     pauseIcon.classList.add('hidden');
     playPauseButton.classList.remove('bg-white', "hover:bg-pink", "hover:fill-white");
 
+    updateLives(lives);
     updateScore(3000);
     updateSliderPosition(sliderPos)
     updateSlidebar(sliderPos, true);
@@ -376,7 +456,7 @@ function resetGameState(){
 
 async function fetchSong(){
 
-    const url = 'http://' + window.location.host + '/api/v1/getsong';
+    const url = 'http://' + window.location.host + '/api/v1/daily/getsong';
 
     try {
 
@@ -838,7 +918,7 @@ async function submitGuess(){
 
     const guess = autocompleteGuess;
 
-    const url = 'http://' + window.location.host + '/api/v1/guess';
+    const url = 'http://' + window.location.host + '/api/v1/daily/guess';
     const xsrf = Cookies.get('XSRF-TOKEN');
 
     const response = await fetch(url,{
@@ -862,7 +942,6 @@ async function submitGuess(){
     autocompleteGuess = null;
 
     const json = await response.json();
-    console.log(json);
     checkGuessResult(json);
 
 }
@@ -870,10 +949,12 @@ async function submitGuess(){
 
 function checkGuessResult(json){
 
+    console.log(json);
+
     const isGuessCorrect = json['correctGuess'];
 
     if(!isGuessCorrect){
-        incorrectGuess(json['guessCount'], json);
+        incorrectGuess(json);
         return;
     }
 
@@ -885,26 +966,47 @@ function checkGuessResult(json){
 
 function correctGuess(json){
 
-    if(json['songNumber'] == 3){
-
-    }
-
-    showRoundEndWidget(json);
+    endRound(json);
 
 }
 
 
-function incorrectGuess(guessCount, json){
+function incorrectGuess(json){
 
     //handle incorrect guess
-    console.log("incorrect");
+    const livesLeft =  lives - json['guessCount'];
+    updateLives(livesLeft);
 
-    if((lives - guessCount) == 0){
+    if(livesLeft == 0){
 
         console.log("Out Of Lives");
-        showRoundEndWidget(json);
+        endRound(json);
 
     }
+
+}
+
+
+function updateLives(livesLeft){
+    userLives.innerText = livesLeft + "/" + lives;
+}
+
+
+function updateSongNumber(songNumber){
+    userSong.innerText = songNumber + "/" + noOfSongs;
+}
+
+
+function endRound(json){
+
+    if(json['songNumber'] == noOfSongs){
+        endGameButton.classList.remove('hidden');
+        nextRoundButton.classList.add('hidden');
+        showGameEndWidget(json);
+        return;
+    }
+
+    showRoundEndWidget(json);
 
 }
 
@@ -913,16 +1015,10 @@ function showRoundEndWidget(json){
 
     stopTimer();
 
+    widgetTitle.innerText = json['correctGuess'] ? "Correct!" : "Incorrect";
     widgetSongTitle.innerText = json['correctTitle'];
     widgetSongArtist.innerText = json['correctArtist'];
-    widgetSongScore.innerText = json['score'];
-
-    // if(gameOver){
-    //     endGameButton.classList.remove('hidden');
-    //     nextRoundButton.classList.add('hidden');
-    // }
-
-    // roundEndWidget
+    widgetSongScore.innerText = json['correctGuess'] ? currentScore : 0;
 
     roundEndWidget.classList.remove('hidden');
 
@@ -930,3 +1026,14 @@ function showRoundEndWidget(json){
     startRound();
 
 }
+
+
+function showGameEndWidget(json){
+
+    gameWidgetScore.innerText = json['overallScore'];
+
+    gameWidget.classList.remove('hidden');
+
+}
+
+
