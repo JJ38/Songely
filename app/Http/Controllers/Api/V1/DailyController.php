@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
-class GameController extends Controller
+class DailyController extends Controller
 {
 
     // api/v1/getsong
@@ -53,8 +53,6 @@ class GameController extends Controller
             $correctGuess = false;
         }
 
-
-
         if(!$correctGuess){
 
             return response()->json([
@@ -70,11 +68,9 @@ class GameController extends Controller
 
         }
 
-
         if($correctGuess || $request->session()->get('guessCount') == 3){
 
             //round over
-
             $currentScore = $request->session()->get('overallScore');
             $newScore = $currentScore + $request->get('score');
             session(['overallScore' => $newScore]);

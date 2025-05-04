@@ -9,7 +9,7 @@
 
     <div id="menu" class="m-auto justify-center">
 
-        <h1 class="text-6xl font-bold">Guess the song by hearing as little as possible</h1>
+        <h1 class="text-6xl font-bold text-center">Guess the song by hearing as little as possible</h1>
 
         <div class="mt-20 flex gap-10 justify-center">
 
@@ -38,9 +38,9 @@
 
             <img id="round_end_widget" src="" alt="">
 
-            <p id="widget_song_title">Score</p>
-            <p id="widget_song_artist">Score</p>
-            <p id="widget_song_score">Score</p>
+            <p id="widget_song_title" class="text-center"></p>
+            <p id="widget_song_artist" class="text-center"></p>
+            <p id="widget_song_score" class="text-center"></p>
 
             <div>
                 <button id="next_round_button" class="text-white text-2xl bg-pink px-6 py-3 rounded-lg hover:bg-pink-300 hover:cursor-pointer duration-200">
@@ -105,7 +105,7 @@
 
             <div class="flex flex-col justify-between items-end mr-5 mt-4 flex-1">
 
-                <div class="flex h-min gap-2">
+                <div id="song_number" class="hidden flex h-min gap-2">
                     <p>Song:</p>
                     <p id="song_number">1/3</p>
                 </div>
@@ -206,20 +206,6 @@
             <x-circle-button id="slider_button" class="w-[27px] h-[27px] top-[2px] bg-white translate-x-[-50%] translate-y-[-50%] absolute hover:w-[32px] hover:h-[32px] hover:cursor-pointer" style="left: 0px"></x-circle-button>
 
         </div>
-
-
-
-        {{-- <div class="bg-white text-xl border border-b-0">
-
-            <x-suggested-song>a team ed sheeran</x-suggested-song>
-            <x-suggested-song>a team theme song</x-suggested-song>
-            <x-suggested-song>a tear in space glass animals</x-suggested-song>
-            <x-suggested-song>a team theme</x-suggested-song>
-
-        </div> --}}
-
-        {{-- <input id="guess_input" class="bg-white h-[60px] w-full border px-5 text-xl" placeholder="Guess a song" type="text" /> --}}
-
 
         <div class="relative flex flex-col mx-auto w-[1000px] mt-auto mb-8">
 
