@@ -79,6 +79,7 @@ let timer;
 let mute = false;
 let volume = 50;
 
+
 let iframe;
 let songTime = 1; //set to 1 not 0 to stop jumping at the start
 let sliderPos = 0;
@@ -320,6 +321,7 @@ function addEventListeners(){
             hideGameUI();
             showMenuUI();
             resetGameState();
+            killGame();
 
         });
 
@@ -334,6 +336,21 @@ function addEventListeners(){
             resetGameState();
 
         });
+
+    }
+
+}
+
+
+function killGame(){
+
+    stopTimer();
+
+    const iframes = document.querySelectorAll('iframe');
+
+    for(let i = 0; i < iframes.length; i++){
+
+        document.body.removeChild(iframes[0]);
 
     }
 
@@ -463,6 +480,7 @@ function resetGameState(){
     sliderPos = 0;
     lengthOfRevealedBar = 0;
     isPaused= true;
+    guessCount = 0;
 
     mainAlbumCover.classList.add('hidden');
     leftAlbumCover.classList.add('hidden');
