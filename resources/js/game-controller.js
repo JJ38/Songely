@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 const menu = document.getElementById('menu');
 const gameContainer = document.getElementById('game_container');
 const homeButton = document.getElementById('home_button');
-const songNumber = document.getElementById('song_number');
+const songNumberContainer = document.getElementById('song_number_container');
 
 const roundEndWidget = document.getElementById('round_end_widget');
 
@@ -25,14 +25,11 @@ const skipStartButton = document.getElementById('skip_start_button');
 const lockedButton = document.getElementById('locked_button');
 const dailyButton = document.getElementById('ready_button');
 const unlimitedButton = document.getElementById('unlimited_button');
-const readyButtonWrapper = document.getElementById('ready_button_wrapper');
 
 const muteButton = document.getElementById('mute_button_container');
 const volumeSlider = document.getElementById('volume_slider');
 const muteIcon = document.getElementById('mute_icon');
 const volumeIcon = document.getElementById('volume_icon');
-
-const playbackButtonWrapper = document.getElementById('playback_button_wrapper');
 
 const sliderButton = document.getElementById('slider_button');
 
@@ -322,6 +319,7 @@ function addEventListeners(){
 
             hideGameUI();
             showMenuUI();
+            resetGameState();
 
         });
 
@@ -349,7 +347,7 @@ function showGameUI(){
     homeButton.classList.remove('hidden');
 
     if(gamemode == gameMode.DAILY){
-        songNumber.classList.remove('hidden');
+        songNumberContainer.classList.remove('hidden');
     }
 
 }
@@ -358,7 +356,7 @@ function showGameUI(){
 function hideGameUI(){
 
     menu.classList.add('hidden');
-    songNumber.classList.add('hidden')
+    songNumberContainer.classList.add('hidden')
     gameContainer.classList.add('hidden');
     homeButton.classList.remove('hidden');
 
@@ -536,7 +534,7 @@ async function fetchSong(){
 
 function loadSong(){
 
-    initialiseSoundcloud(getIframeURL(song['id']));
+    initialiseSoundcloud(getIframeURL(song['urn']));
     soundcloudInitialised = true;
 
 }
@@ -619,8 +617,10 @@ function soundcloudIsReady(){
 }
 
 
-function getIframeURL(id){
+function getIframeURL(urn){
 
+    const id = urn.replace("soundcloud:tracks:", "");
+    console.log(id);
     const iframeURL = "https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/" + id;
     return iframeURL;
 

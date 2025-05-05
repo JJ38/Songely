@@ -15,9 +15,18 @@ class DailyController extends Controller
     // api/v1/getsong
     public function index(Request $request){
 
+
+
+        $numberOfSongs = 346;
+        $salt = "ouijasdrfhguopiasdrfoiphu" . $request->session()->get('songNumber');
+        $hashInput = date("Y/m/d") . $salt;
+
+        $hash = hash('sha256', $hashInput);
+        $seed = intval(substr($hash,0,6),16);
+        //echo $seed % $numberOfSongs;
+
         $song = Song::query()
-            ->inRandomOrder()
-            ->first();
+            ->find($seed % $numberOfSongs);
 
         $song->albumCover = str_replace('-large.', '-t500x500.', $song->albumCover);
 
@@ -28,9 +37,8 @@ class DailyController extends Controller
             'guessCount' => 0
         ]);
 
-
         return response()->json([
-            'id' => $song->id,
+            'urn' => $song->urn,
             'title' => $song->title,
             'artist' => $song->artist,
             'albumCover' => $song->albumCover,

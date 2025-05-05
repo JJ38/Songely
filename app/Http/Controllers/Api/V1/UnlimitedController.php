@@ -19,7 +19,7 @@ class UnlimitedController extends Controller
         $song->albumCover = str_replace('-large.', '-t500x500.', $song->albumCover);
 
         return response()->json([
-            'id' => $song->id,
+            'urn' => $song->urn,
             'title' => $song->title,
             'artist' => $song->artist,
             'albumCover' => $song->albumCover,

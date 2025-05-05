@@ -24,8 +24,8 @@
                     Unlimited
                 </button>
             </div>
-        </div>
 
+        </div>
 
     </div>
 
@@ -105,7 +105,7 @@
 
             <div class="flex flex-col justify-between items-end mr-5 mt-4 flex-1">
 
-                <div id="song_number" class="hidden flex h-min gap-2">
+                <div id="song_number_container" class="hidden flex h-min gap-2">
                     <p>Song:</p>
                     <p id="song_number">1/3</p>
                 </div>

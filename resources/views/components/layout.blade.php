@@ -21,7 +21,7 @@
 <body class="flex flex-col bg-lightgray font-hanken-grotesk min-h-screen overflow-hidden">
     <nav class="flex justify-between pt-7 px-12">
 
-        <div>
+        <div class="flex">
             <x-button id="home_button" class="hidden">Home</x-button>
         </div>
 
