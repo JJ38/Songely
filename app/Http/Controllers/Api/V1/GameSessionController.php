@@ -17,11 +17,12 @@ class GameSessionController extends Controller
         session([
             'songNumber' => 0,
             'guessCount' => 0,
-            'overallScore' => 0
+            'overallScore' => 0,
+            'songIDs' => []
         ]);
 
         return response()->json([
-            'message' => $request->session()->get('test'),
+            'session' => $request->session()->all(),
         ]);
 
     }

@@ -1055,6 +1055,8 @@ function submitGuess(){
 
 function checkGuessResult(json){
 
+    console.log(json);
+
     const isGuessCorrect = json['correctGuess'];
     json['score'] = json['correctGuess'] ? currentScore : 0;
 
@@ -1104,7 +1106,7 @@ function updateSongNumber(songNumber){
 
 function endRound(json){
 
-    if(json['songNumber'] == noOfSongs){
+    if(json['anotherRound'] === false){
         endGameButton.classList.remove('hidden');
         nextRoundButton.classList.add('hidden');
         showGameEndWidget(json);
@@ -1118,8 +1120,6 @@ function endRound(json){
 
 function showRoundEndWidget(json){
 
-    console.log(json);
-
     stopTimer();
 
     widgetTitle.innerText = json['correctGuess'] ? "Correct!" : "Incorrect";
@@ -1130,7 +1130,9 @@ function showRoundEndWidget(json){
     roundEndWidget.classList.remove('hidden');
 
     soundcloudBackground = iframe;
+
     startRound();
+
 
 }
 
