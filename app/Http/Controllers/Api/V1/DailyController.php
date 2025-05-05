@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rules\Unique;
+use Symfony\Component\String\TruncateMode;
 
 class DailyController extends Controller
 {
@@ -16,12 +17,21 @@ class DailyController extends Controller
     // api/v1/getsong
     public function index(Request $request){
 
-        $songIDArray = $request->session()->get('songIDs');
+        //check if game completed today
+
+        if(session()->get('completed')){
+            return response()->json([
+                'message' => "You have already completed todays game"
+            ]);
+        }
+
+
+        $songIDArray = session()->get('songIDs');
         $uniqueID = false;
         $songID = 0;
 
         $numberOfSongs = 346;
-        $salt = "ouijasdrfhguopiasdrfoiphu" . $request->session()->get('songNumber');
+        $salt = "ouijasdrfhguasdrfoiphu" . session()->get('songNumber');
         $hashInput = date("Y/m/d") . $salt;
 
         $hash = hash('sha256', $hashInput);
@@ -35,7 +45,7 @@ class DailyController extends Controller
             //check if already fetched
             if(!in_array($songID, $songIDArray)){
                 $uniqueID = true;
-                $request->session()->push('songIDs', $songID);
+                session()->push('songIDs', $songID);
             }else{
 
                 $songID = ($songID + 1) % $numberOfSongs;
@@ -49,11 +59,14 @@ class DailyController extends Controller
 
         $song->albumCover = str_replace('-large.', '-t500x500.', $song->albumCover);
 
-        $request->session()->increment('songNumber');
+        session()->push('songs', $song);
+
+        session()->increment('songNumber');
 
         session([
             'songToGuess' => $song,
-            'guessCount' => 0
+            'guessCount' => 0,
+            'accuracyBonus' => true
         ]);
 
         return response()->json([
@@ -61,8 +74,8 @@ class DailyController extends Controller
             'title' => $song->title,
             'artist' => $song->artist,
             'albumCover' => $song->albumCover,
-            'songNumber' => $request->session()->get('songNumber'),
-            'session' => $request->session()->all()
+            'songNumber' => session()->get('songNumber'),
+            'session' => session()->all()
         ], 200);
 
     }
@@ -72,7 +85,7 @@ class DailyController extends Controller
 
         $guess = $request->get('guess');
         $songToGuess = session()->get('songToGuess');
-        $request->session()->increment('guessCount');
+        session()->increment('guessCount');
 
         $correctGuess = true;
 
@@ -83,11 +96,13 @@ class DailyController extends Controller
 
         $response = [
             'roundEnd' => false,
-            'guessCount' => $request->session()->get('guessCount'),
+            'guessCount' => session()->get('guessCount'),
         ];
 
         //if incorrect and round not over
         if(!$correctGuess){
+
+            session(['accuracyBonus' => false]);
 
             $response = array_merge($response, [
                 'correctGuess' =>  false,
@@ -105,18 +120,45 @@ class DailyController extends Controller
         }
 
         //is round over
-        if($correctGuess || $request->session()->get('guessCount') >= 3){
+        if($correctGuess || session()->get('guessCount') >= 3){
 
-            $currentScore = $request->session()->get('overallScore');
+            $currentScore = session()->get('overallScore');
             $newScore = $currentScore + $request->get('score');
             session(['overallScore' => $newScore]);
 
+
+            session()->push('scores', $request->get('score'));
+
+
             $response = array_merge($response, [
                 'roundEnd' => true,
-                'anotherRound' => $request->session()->get('songNumber') < 3,
                 'score' =>  $request->get('score'),
+                'scores' =>  session()->get('scores'), //debug
                 'correctArtist' => $songToGuess['artist'],
-                'correctTitle' => $songToGuess['title']
+                'correctTitle' => $songToGuess['title'],
+                'anotherRound' => true,
+            ]);
+
+        }
+
+        //is game over
+        if(session()->get('songNumber') >= 3){
+
+            session([
+                'completed' => true
+            ]);
+            $overallScore = session()->get('overallScore');
+
+            if(session()->get('accuracyBonus')){
+                $overallScore += 1000;
+                session(['overallScore' => $overallScore]); //done so it can be shown to the user if they try to play again today
+            }
+
+            $response = array_merge($response, [
+                'anotherRound' => false,
+                'songs' => session()->get('songs'),
+                'overallScore' => $overallScore,
+                'accuracyBonus' => session()->get('accuracyBonus')
             ]);
 
         }

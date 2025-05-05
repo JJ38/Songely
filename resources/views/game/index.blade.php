@@ -50,51 +50,115 @@
 
         </div>
 
-        <div id="game_end_widget" class="hidden absolute flex flex-col items-center bg-white w-100 h-150 border rounded-xl z-20 right-[50%] translate-x-[50%] py-10 px-6">
+        <div id="game_end_widget" class="hidden absolute flex flex-col items-center bg-white w-150 h-150 border rounded-xl z-20 right-[50%] translate-x-[50%] py-10 px-6">
 
             <h2 class="text-5xl font-bold">Game Over</h2>
 
             <img id="game_widget" src="" alt="">
 
-            <p id="game_widget_title">Song Title</p>
-
-            <div id="game_overall_score">
+            <div id="game_overall_score" class="mt-6 flex text-3xl font-bold">
                 <p id="game_widget_score"></p>
                 <p>/10000</p>
             </div>
 
-            <div class="w-full flex flex-col items-center">
+            <div class="w-full flex flex-col">
 
-                <div class="flex">
-                    <p id="game_song_1">Song Artist</p>
-                    <div class="flex">
-                        <p id="game_widget_score"></p>
-                        <p>/3000</p>
+                <div class="mt-5">
+
+                    <div class="flex justify-between text-xl">
+
+                        <div class="flex">
+
+                            <p id="game_song_artist_1">Song Artist</p>
+                            <p>&nbsp;-&nbsp;</p>
+                            <p id="game_song_title_1">Song Artist</p>
+
+                        </div>
+
+                        <div class="flex">
+
+                            <p id="game_song_score_1"></p>
+                            <p>/3000</p>
+
+                        </div>
+
                     </div>
+
+                    <div class="relative w-full h-3">
+
+                        <div class="absolute w-full h-3 rounded bg-gray-200"></div>
+                        <div id="game_song_bar_1" class="absolute w-[0%] h-3 rounded bg-pink"></div>
+
+                    </div>
+
                 </div>
 
-                <div class="flex">
-                    <p id="game_song_2">Song Artist</p>
-                    <div class="flex">
-                        <p id="game_widget_score"></p>
-                        <p>/3000</p>
+                <div class="mt-5">
+
+                    <div class="flex justify-between text-xl">
+
+                        <div class="flex">
+
+                            <p id="game_song_artist_2">Song Artist</p>
+                            <p>&nbsp;-&nbsp;</p>
+                            <p id="game_song_title_2" class="text-pretty">Song Title</p>
+
+                        </div>
+
+                        <div class="flex">
+
+                            <p id="game_song_score_2"></p>
+                            <p>/3000</p>
+
+                        </div>
+
                     </div>
+
+                    <div class="relative w-full h-3">
+
+                        <div class="absolute w-full h-3 rounded bg-gray-200"></div>
+                        <div id="game_song_bar_2" class="absolute w-[0%] h-3 rounded bg-pink"></div>
+
+                    </div>
+
                 </div>
 
-                <div class="flex">
-                    <p id="game_song_3">Song Artist</p>
-                    <div class="flex">
-                        <p id="game_widget_score"></p>
-                        <p>/3000</p>
+                <div class="mt-5">
+
+                    <div class="flex justify-between text-xl">
+
+                        <div class="flex">
+
+                            <p id="game_song_artist_3">Song Artist</p>
+                            <p>&nbsp;-&nbsp;</p>
+                            <p id="game_song_title_3">Song Title</p>
+
+                        </div>
+
+                        <div class="flex">
+
+                            <p id="game_song_score_3"></p>
+                            <p>/3000</p>
+
+                        </div>
+
                     </div>
+
+                    <div class="relative w-full h-3">
+
+                        <div class="absolute w-full h-3 rounded bg-gray-200"></div>
+                        <div id="game_song_bar_3" class="absolute w-[0%] h-3 rounded bg-pink"></div>
+
+                    </div>
+
                 </div>
 
 
-                <p>+ 1000 accuracy bonus</p>
+                <p id="accuracy_bonus" class="hidden mt-6 text-xl text-bold text-center">+ 1000 accuracy bonus</p>
             </div>
 
-            <div>
-                <button id="end_game_button" class="hidden text-white text-2xl bg-pink px-6 py-3 rounded-lg hover:bg-pink-300 hover:cursor-pointer duration-200">
+            <div class="mt-auto">
+                <button id="end_game_button" class="text-white text-2xl bg-pink px-6 py-3 rounded-lg hover:bg-pink-300 hover:cursor-pointer duration-200">
                     Ok
                 </button>
             </div>
