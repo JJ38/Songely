@@ -25,14 +25,13 @@ class DailyController extends Controller
             ]);
         }
 
-
         $songIDArray = session()->get('songIDs');
         $uniqueID = false;
         $songID = 0;
 
         $numberOfSongs = 346;
         $salt = "ouijasdrfhguasdrfoiphu" . session()->get('songNumber');
-        $hashInput = date("Y/m/d") . $salt;
+        $hashInput = session()->get('date') . $salt;
 
         $hash = hash('sha256', $hashInput);
         $seed = intval(substr($hash,0,6),16);
@@ -112,7 +111,6 @@ class DailyController extends Controller
 
         if($correctGuess){
 
-            //round over
             $response = array_merge($response, [
                 'correctGuess' =>  true,
             ]);
@@ -147,6 +145,7 @@ class DailyController extends Controller
             session([
                 'completed' => true
             ]);
+
             $overallScore = session()->get('overallScore');
 
             if(session()->get('accuracyBonus')){

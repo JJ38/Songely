@@ -56,6 +56,7 @@ const lockedIcon = document.getElementById('locked_icon');
 const unlockedIcon = document.getElementById('unlocked_icon');
 
 const albumImageContainer = document.getElementById('album_image_container');
+const vinylLoader = document.getElementById('vinyl_loader');
 
 const mainAlbumCover = document.getElementById('main_album_cover');
 const leftAlbumCover = document.getElementById('left_album_cover');
@@ -460,8 +461,18 @@ async function startDailyGame(){
 
     if(json['completed'] === true){
 
-        showGameEndWidget(response);
+        showGameEndWidget(json);
         return;
+
+    }else if(json['gamePartiallyCompleted'] === true){
+
+        console.log(json);
+        song = json;
+        loadSong();
+        updateSongNumber(json['songNumber']);
+        updateLives(lives - json['guessCount']);
+        setSongTime(songLengthMs); //reveals song and sets score to zero to stop cheating by refreshing the page
+        setSongTime(0);
 
     }else{
 
@@ -513,6 +524,7 @@ function resetGameState(){
     mainAlbumCover.classList.add('hidden');
     leftAlbumCover.classList.add('hidden');
     rightAlbumCover.classList.add('hidden');
+    vinylLoader.classList.remove('hidden');
 
     playIcon.classList.remove('hidden');
     pauseIcon.classList.add('hidden');
@@ -589,6 +601,8 @@ function loadSong(){
 
 
 function loadAlbumCover(albumCoverURL){
+
+    vinylLoader.classList.add('hidden');
 
     mainAlbumCover.classList.remove('hidden');
     leftAlbumCover.classList.remove('hidden');

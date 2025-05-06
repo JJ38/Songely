@@ -29,7 +29,6 @@
 
     </div>
 
-
     <div id="game_container" class="hidden relative flex flex-col flex-1">
 
         <div id="round_end_widget" class="hidden absolute flex flex-col items-center bg-white w-100 h-150 border rounded-xl z-20 right-[50%] translate-x-[50%] py-10 px-6">
@@ -185,7 +184,10 @@
 
                 <div class="w-[220px] m-auto">
 
-                    <div class="rounded-2xl">
+                    <div class="relative rounded-2xl">
+
+                        <img id="vinyl_loader" class="absolute w-[220px] h-[220px] animate-spin" src="{{ Vite::asset('resources/images/vinyl_record_svg.svg') }}" alt="">
+
                         <div id="album_image_container" class="h-[220px] overflow-hidden rounded-xl blur-[40px]">
                             <img id="main_album_cover" src=""
                             alt="{{ Vite::asset('resources/images/album_cover_placeholder.png') }}"
@@ -308,7 +310,7 @@
             <input id="guess_input" class="bg-white h-[60px] w-full border px-5 text-xl" placeholder="Guess a song" type="text" />
 
             <div class="mx-auto mt-4">
-                @csrf
+
                 <button id="guess_button" class="text-white text-2xl bg-pink px-6 py-3 rounded-lg w-min hover:bg-pink-300 hover:cursor-pointer duration-200">
                     Guess
                 </button>
