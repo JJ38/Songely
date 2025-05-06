@@ -521,12 +521,13 @@ function resetGameState(){
     isPaused= true;
     guessCount = 0;
 
-    mainAlbumCover.classList.add('opacity-0');
-    leftAlbumCover.classList.add('opacity-0');
-    rightAlbumCover.classList.add('opacity-0');
     mainAlbumCover.classList.add('hidden');
     leftAlbumCover.classList.add('hidden');
     rightAlbumCover.classList.add('hidden');
+
+    mainAlbumCover.classList.add('opacity-0');
+    leftAlbumCover.classList.add('opacity-0');
+    rightAlbumCover.classList.add('opacity-0');
 
     vinylLoader.classList.remove('hidden');
 
@@ -603,18 +604,23 @@ function loadSong(){
 
 }
 
-
-function loadAlbumCover(albumCoverURL){
+function showAlbumCover(){
 
     vinylLoader.classList.add('hidden');
-
-    mainAlbumCover.classList.remove('hidden');
-    leftAlbumCover.classList.remove('hidden');
-    rightAlbumCover.classList.remove('hidden');
 
     mainAlbumCover.classList.remove('opacity-0');
     leftAlbumCover.classList.remove('opacity-0');
     rightAlbumCover.classList.remove('opacity-0');
+
+}
+
+
+function loadAlbumCover(albumCoverURL){
+
+    //needed to be done before animating opacity as it would stop the opacity animatio otherwise
+    mainAlbumCover.classList.remove('hidden');
+    leftAlbumCover.classList.remove('hidden');
+    rightAlbumCover.classList.remove('hidden');
 
     if(albumCoverURL != null){
 
@@ -623,7 +629,6 @@ function loadAlbumCover(albumCoverURL){
         rightAlbumCover.src = albumCoverURL;
 
     }
-
 
 }
 
@@ -660,6 +665,7 @@ function bufferSong(){
 
     soundcloud.setVolume(0);
     soundcloud.play();
+    loadAlbumCover(song['albumCover']);
 
     setTimeout(() => {
 
@@ -680,8 +686,9 @@ function bufferSong(){
 
 function soundcloudIsReady(){
 
+    showAlbumCover();
+
     soundcloudReady = true;
-    loadAlbumCover(song['albumCover']);
     playPauseButton.classList.add('bg-white','hover:bg-pink', 'hover:fill-white');
 
 }
