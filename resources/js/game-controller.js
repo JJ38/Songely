@@ -6,13 +6,17 @@ const homeButton = document.getElementById('home_button');
 const songNumberContainer = document.getElementById('song_number_container');
 
 const roundEndWidget = document.getElementById('round_end_widget');
+const gameCard = document.getElementById('game_card');
 
-const widgetSongTitle = document.getElementById('widget_song_title');
-const widgetSongArtist = document.getElementById('widget_song_artist');
-const widgetSongScore = document.getElementById('widget_song_score');
+const roundSongTitle = document.getElementById('round_song_title');
+const roundSongArtist = document.getElementById('round_song_artist');
+const roundSongScore = document.getElementById('round_song_score');
+const soundcloudLogo = document.getElementById('soundcloud_logo');
+
+const nextRoundButtonContainer = document.getElementById('next_round_button_container');
 const nextRoundButton = document.getElementById('next_round_button');
 const endGameButton = document.getElementById('end_game_button');
-const widgetTitle = document.getElementById('widget_title');
+const widgetTitle = document.getElementById('round_title');
 
 const gameWidget = document.getElementById('game_end_widget');
 const gameWidgetScore = document.getElementById('game_widget_score');
@@ -34,6 +38,7 @@ const gameSongBar3 = document.getElementById('game_song_bar_3');
 
 const accuracyBonus = document.getElementById('accuracy_bonus');
 
+const playbackButtonsContainer = document.getElementById('playback_button_wrapper')
 const playPauseButton = document.getElementById('play_pause_button');
 const skipStartButton = document.getElementById('skip_start_button');
 const lockedButton = document.getElementById('locked_button');
@@ -319,7 +324,6 @@ function addEventListeners(){
         nextRoundButton.addEventListener('click', () => {
 
             console.log("nextroundbutton");
-            roundEndWidget.classList.add('hidden');
             document.body.removeChild(soundcloudBackground);
             updateSongNumber(song['songNumber']);
             resetGameState();
@@ -536,9 +540,35 @@ function resetGameState(){
     playPauseButton.classList.remove('bg-white', "hover:bg-pink", "hover:fill-white");
 
     gameWidget.classList.add('hidden');
-    roundEndWidget.classList.add('hidden');
 
     accuracyBonus.classList.add('hidden');
+
+    //show song details
+    widgetTitle.classList.add('hidden');
+    roundSongArtist.classList.add('hidden');
+    roundSongTitle.classList.add('hidden');
+    roundSongScore.classList.add('hidden');
+
+
+    //hide playback
+    playbackButtonsContainer.classList.remove('hidden');
+    playbackButtonsContainer.classList.remove('h-0');
+
+
+    //change game card size
+    gameCard.classList = "py-10 px-10 w-[320px] h-[390px] bg-white rounded-xl border drop-shadow-xl/25 duration-1000";
+    albumImageContainer.style.filter = "";
+    albumImageContainer.style.height = "";
+    albumImageContainer.classList = "h-[220px] overflow-hidden rounded-xl blur-[40px]";
+
+    soundcloudLogo.classList.add('hidden');
+
+    mainAlbumCover.classList.add("opacity-0");
+    mainAlbumCover.classList.add("duration-1000");
+
+
+    nextRoundButtonContainer.classList.add('hidden');
+
 
     updateLives(lives);
     updateScore(3000);
@@ -562,7 +592,6 @@ async function fetchSong(){
         url = 'http://' + window.location.host + '/api/v1/unlimited/getsong';
 
     }
-
 
     try {
 
@@ -1182,16 +1211,37 @@ function showRoundEndWidget(json){
     stopTimer();
 
     widgetTitle.innerText = json['correctGuess'] ? "Correct!" : "Incorrect";
-    widgetSongTitle.innerText = json['correctTitle'];
-    widgetSongArtist.innerText = json['correctArtist'];
-    widgetSongScore.innerText = json['score'];
+    roundSongTitle.innerText = json['correctTitle'];
+    roundSongArtist.innerText = json['correctArtist'];
+    roundSongScore.innerText = "You guessed the song in " + ((songLengthMs/1000) - (json['score']/100)).toFixed(2) + "s";
 
-    roundEndWidget.classList.remove('hidden');
+    //show song details
+    widgetTitle.classList.remove('hidden');
+    roundSongArtist.classList.remove('hidden');
+    roundSongTitle.classList.remove('hidden');
+    roundSongScore.classList.remove('hidden');
+
+    //hide playback
+    playbackButtonsContainer.classList.add('hidden');
+    playbackButtonsContainer.classList.add('h-0');
+
+    //change game card size
+    gameCard.classList = "flex flex-col items-center bg-white w-90 border rounded-xl z-20 py-10 px-6 duration-1000";
+    albumImageContainer.style.filter = "none";
+    albumImageContainer.style.height = "max-content";
+    albumImageContainer.classList = "relative border-2 border-gray-400 flex justify-between px-3 py-2 px-5 rounded-xl flex gap-2 items-center w-full mt-3 overflow-hidden";
+
+    soundcloudLogo.classList.remove('hidden');
+
+    mainAlbumCover.classList = "absolute -z-10 right-0 duration-1000";
+
+    //show next round button
+    nextRoundButtonContainer.classList.remove('hidden');
+    nextRoundButton.classList.remove('hidden')
 
     soundcloudBackground = iframe;
 
     startRound();
-
 
 }
 
