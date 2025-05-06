@@ -521,9 +521,13 @@ function resetGameState(){
     isPaused= true;
     guessCount = 0;
 
+    mainAlbumCover.classList.add('opacity-0');
+    leftAlbumCover.classList.add('opacity-0');
+    rightAlbumCover.classList.add('opacity-0');
     mainAlbumCover.classList.add('hidden');
     leftAlbumCover.classList.add('hidden');
     rightAlbumCover.classList.add('hidden');
+
     vinylLoader.classList.remove('hidden');
 
     playIcon.classList.remove('hidden');
@@ -607,6 +611,10 @@ function loadAlbumCover(albumCoverURL){
     mainAlbumCover.classList.remove('hidden');
     leftAlbumCover.classList.remove('hidden');
     rightAlbumCover.classList.remove('hidden');
+
+    mainAlbumCover.classList.remove('opacity-0');
+    leftAlbumCover.classList.remove('opacity-0');
+    rightAlbumCover.classList.remove('opacity-0');
 
     if(albumCoverURL != null){
 

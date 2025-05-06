@@ -189,7 +189,7 @@
                         <img id="vinyl_loader" class="absolute w-[220px] h-[220px] animate-spin" src="{{ Vite::asset('resources/images/vinyl_record_svg.svg') }}" alt="">
 
                         <div id="album_image_container" class="h-[220px] overflow-hidden rounded-xl blur-[40px]">
-                            <img id="main_album_cover" src=""
+                            <img id="main_album_cover" src="" class="opacity-0 duration-1000"
                             alt="{{ Vite::asset('resources/images/album_cover_placeholder.png') }}"
                             >
                         </div>
@@ -319,13 +319,13 @@
         </div>
 
         <div class="absolute left-0 top-0 blur-[300px] translate-x-[-90%] translate-y-[-50%] -z-10">
-            <img id="left_album_cover" class="w-150" src=""
+            <img id="left_album_cover" class="w-175 opacity-0 duration-1000" src=""
             alt="{{ Vite::asset('resources/images/album_cover_placeholder.png') }}"
             >
         </div>
 
         <div class="absolute right-0 bottom-0 blur-[300px] translate-x-[90%] translate-y-[50%] -z-10">
-            <img id="right_album_cover" class="w-150 h-150" src=""
+            <img id="right_album_cover" class="w-175 h-175 opacity-0 duration-1000" src=""
             alt="{{ Vite::asset('resources/images/album_cover_placeholder.png') }}"
             >
         </div>
