@@ -120,12 +120,17 @@ class DailyController extends Controller
         //is round over
         if($correctGuess || session()->get('guessCount') >= 3){
 
+            $roundscore = 0;
+            if($correctGuess){
+                $roundscore = $request->get('score');
+            }
+
             $currentScore = session()->get('overallScore');
-            $newScore = $currentScore + $request->get('score');
+            $newScore = $currentScore +  $roundscore;
             session(['overallScore' => $newScore]);
 
 
-            session()->push('scores', $request->get('score'));
+            session()->push('scores',  $roundscore);
 
 
             $response = array_merge($response, [
