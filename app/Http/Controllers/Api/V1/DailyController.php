@@ -58,6 +58,9 @@ class DailyController extends Controller
 
         $song->albumCover = str_replace('-large.', '-t500x500.', $song->albumCover);
 
+        //get rid of noise in song title e.g [radio edition]
+        $filteredTitle = str_replace(" ", "" , str_replace(strpbrk($song->title, '([-'), "", $song->title));
+        $song['filteredTitle'] = $filteredTitle;
         session()->push('songs', $song);
 
         session()->increment('songNumber');
@@ -69,6 +72,7 @@ class DailyController extends Controller
         ]);
 
         return response()->json([
+            'fitleredTitle' => $filteredTitle,
             'urn' => $song->urn,
             'title' => $song->title,
             'artist' => $song->artist,
@@ -89,7 +93,7 @@ class DailyController extends Controller
 
         $correctGuess = true;
 
-        if(!(strtolower($songToGuess['title']) == strtolower($guess['title'])) || !(strtolower($songToGuess['artist']) == strtolower($guess['artist']))){
+        if(!(strtolower($songToGuess['filteredTitle']) == strtolower($guess['title'])) || !(strtolower($songToGuess['artist']) == strtolower($guess['artist']))){
             //incorrect guess
             $correctGuess = false;
         }

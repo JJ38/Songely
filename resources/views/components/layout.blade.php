@@ -25,10 +25,10 @@
             <x-button id="home_button" class="hidden">Home</x-button>
         </div>
 
-        <div class="flex gap-7">
+        {{-- <div class="flex gap-7">
             <x-button href="/register">Register</x-button>
             <x-button href="/login">Log In</x-button>
-        </div>
+        </div> --}}
 
     </nav>
     <main class="flex flex-col flex-1">

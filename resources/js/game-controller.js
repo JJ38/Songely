@@ -512,13 +512,42 @@ async function startRound(){
 
     song = await fetchSong();
 
+    filterTitle(song['title']);
     console.log(song);
+
     if(song == null){
         alert("error loading song.")
         return false;
     }
 
     return true;
+
+}
+
+
+function filterTitle(songTitle){
+
+    const chars = ['[', '(', '-'];
+
+    console.log(songTitle);
+
+    const title = songTitle.replaceAll(" ", "")
+
+    for(let i = 0; i < title.length; i++){
+
+        for(let j = 0; j < chars.length; j++){
+
+            if(title[i] == chars[j]){
+                // console.log(chars[j] + " at index " + i);
+                return title.substring(0, i).replaceAll(" ", "");
+
+            }
+
+        }
+
+    }
+
+    return title;
 
 }
 
@@ -1057,6 +1086,8 @@ function clearAutoComplete(){
 
 async function dailyGuess(guess){
 
+    guess['title'] = filterTitle(guess['title']);
+
     const url = 'http://' + window.location.host + '/api/v1/daily/guess';
     const xsrf = Cookies.get('XSRF-TOKEN');
 
@@ -1087,9 +1118,13 @@ function unlimitedGuess(guess){
 
     guessCount ++;
 
+    guess['title'] = filterTitle(guess['title']);
+
+    console.log(guess);
+
     let userGuess = true;
 
-    if(!(song['title'].toLowerCase() == guess['title'].toLowerCase()) || !(song['artist'].toLowerCase() == guess['artist'].toLowerCase())){
+    if(!(song['filteredTitle'].toLowerCase() == guess['title'].toLowerCase()) || !(song['artist'].toLowerCase() == guess['artist'].toLowerCase())){
         //incorrect guess
         userGuess = false;
 
