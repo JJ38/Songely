@@ -5,7 +5,6 @@ const gameContainer = document.getElementById('game_container');
 const homeButton = document.getElementById('home_button');
 const songNumberContainer = document.getElementById('song_number_container');
 
-const roundEndWidget = document.getElementById('round_end_widget');
 const gameCard = document.getElementById('game_card');
 
 const roundSongTitle = document.getElementById('round_song_title');
@@ -437,7 +436,7 @@ async function startGame(){
 async function startDailyGame(){
 
 
-    await fetch("http://localhost/sanctum/csrf-cookie",{
+    await fetch("http://" + window.location.host + "/sanctum/csrf-cookie",{
 
         method: "GET",
         headers: {
@@ -527,7 +526,7 @@ async function startRound(){
 
 function filterTitle(songTitle){
 
-    const chars = ['[', '(', '-'];
+    const chars = ['[', '(',];
 
     console.log(songTitle);
 
@@ -548,6 +547,21 @@ function filterTitle(songTitle){
     }
 
     return title;
+}
+
+
+function filterArtist(songArtist){
+
+    const artist = songArtist.replaceAll(" ", "");
+    const index = songArtist.indexOf('feat.');
+
+    if(index != -1){
+
+        return artist.substring(0, index);
+
+    }
+
+    return artist;
 
 }
 
@@ -1087,6 +1101,7 @@ function clearAutoComplete(){
 async function dailyGuess(guess){
 
     guess['title'] = filterTitle(guess['title']);
+    guess['artist'] = filterArtist(guess['artist']);
 
     const url = 'http://' + window.location.host + '/api/v1/daily/guess';
     const xsrf = Cookies.get('XSRF-TOKEN');
@@ -1119,12 +1134,13 @@ function unlimitedGuess(guess){
     guessCount ++;
 
     guess['title'] = filterTitle(guess['title']);
+    guess['artist'] = filterArtist(guess['artist']);
 
     console.log(guess);
 
     let userGuess = true;
 
-    if(!(song['filteredTitle'].toLowerCase() == guess['title'].toLowerCase()) || !(song['artist'].toLowerCase() == guess['artist'].toLowerCase())){
+    if(!(song['filteredTitle'].toLowerCase() == guess['title'].toLowerCase()) || !(song['filteredArtist'].toLowerCase() == guess['artist'].toLowerCase())){
         //incorrect guess
         userGuess = false;
 

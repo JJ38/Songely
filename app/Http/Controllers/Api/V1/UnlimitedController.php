@@ -17,10 +17,18 @@ class UnlimitedController extends Controller
             ->first();
 
         $song->albumCover = str_replace('-large.', '-t500x500.', $song->albumCover);
-        $filteredTitle = str_replace(" ", "" , str_replace(strpbrk($song->title, '([-'), "", $song->title));
+        $filteredTitle = str_replace(" ", "" , str_replace(strpbrk($song->title, '(['), "", $song->title));
+
+
+        $filteredArtist = str_replace(" ", "" , $song->artist);
+
+        if(strpos($filteredArtist, 'feat.')){
+            $filteredArtist = substr($filteredArtist, 0, strpos($filteredArtist, 'feat.'));
+        }
 
         return response()->json([
             'filteredTitle' => $filteredTitle,
+            'filteredArtist' => $filteredArtist,
             'urn' => $song->urn,
             'url' => $song->url,
             'title' => $song->title,

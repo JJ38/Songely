@@ -12,7 +12,6 @@ class GameSessionController extends Controller
 
     public function store(Request $request){
 
-        session()->flush();
         date_default_timezone_set('UTC');
 
         //if the dates are the same and completed they have played todays game to COMPLETION
