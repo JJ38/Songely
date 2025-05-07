@@ -549,9 +549,9 @@ function resetGameState(){
     playPauseButton.classList.remove('bg-white', "hover:bg-pink", "hover:fill-white");
 
     gameWidget.classList.add('hidden');
+    gameWidget.style = "";
 
     accuracyBonus.classList.add('hidden');
-
 
     //show song details
     widgetTitle.classList.add('hidden');
@@ -1261,7 +1261,9 @@ function showRoundEndWidget(json){
 function showGameEndWidget(json){
 
     gameWidgetScore.innerText = json['overallScore'];
-    gameWidget.classList.remove('hidden');
+
+    // gameWidget.style.transitionDuration  = "1s";
+    // gameWidget.style.width = "400px";
 
     gameSongScore1.innerText = json['scores'][0];
     gameSongScore2.innerText = json['scores'][1];
@@ -1292,6 +1294,19 @@ function showGameEndWidget(json){
         accuracyBonus.classList.remove('hidden');
     }
 
+
+    gameWidget.classList.remove('hidden');
+    // gameWidget.classList.add('w-[400px]');
+    // gameWidget.classList.remove('w-[320px]');
+
+    //timeout is needed for the animation to work. It doesnt like having hidden being remove and animating at the same time
+    setTimeout(() => {
+        gameWidget.style.width = "450px"
+        //gameWidget.classList = "absolute flex flex-col items-center bg-white w-[400px] h-min border rounded-xl z-20 right-[50%] translate-x-[50%] py-10 px-6 duration-1000";
+    },10);
+
+
+
 }
 
 
@@ -1316,5 +1331,5 @@ const dummyData = {
 
 }
 
-showGameEndWidget(dummyData);
-showGameUI();
+// showGameEndWidget(dummyData);
+// showGameUI();

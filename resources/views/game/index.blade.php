@@ -7,7 +7,7 @@
 
     <script src="https://w.soundcloud.com/player/api.js" type="text/javascript"></script>
 
-    <div id="menu" class="hidden m-auto justify-center">
+    <div id="menu" class="m-auto justify-center">
 
         <h1 class="text-6xl font-bold text-center">Guess the song in the shortest time</h1>
 
@@ -29,9 +29,9 @@
 
     </div>
 
-    <div id="game_container" class=" relative flex flex-col flex-1">
+    <div id="game_container" class="hidden relative flex flex-col flex-1">
 
-        <div id="game_end_widget" class=" absolute flex flex-col items-center bg-white w-100 h-min border rounded-xl z-20 right-[50%] translate-x-[50%] py-10 px-6">
+        <div id="game_end_widget" class="hidden absolute flex flex-col items-center bg-white w-[320px] h-min border rounded-xl z-20 right-[50%] translate-x-[50%] py-10 px-6 duration-1000">
 
             <h2 class="text-5xl font-bold">Game Over</h2>
 
@@ -167,7 +167,7 @@
 
                 </div>
 
-                <div class="relative rounded-2xl w-full">
+                <div class="relative rounded-2xl w-full mb-6">
 
                     <a id="soundcloud_card_link_3" href="" target="_blank">
 
@@ -196,7 +196,7 @@
 
                 </div>
 
-                <p id="accuracy_bonus" class="hidden mt-6 text-xl text-bold text-center">+ 1000 accuracy bonus</p>
+                <p id="accuracy_bonus" class="hidden text-xl text-bold text-center">+ 1000 accuracy bonus</p>
             </div>
 
             <div class="mt-auto">
