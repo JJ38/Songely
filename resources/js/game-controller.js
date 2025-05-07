@@ -20,17 +20,21 @@ const widgetTitle = document.getElementById('round_title');
 
 const gameWidget = document.getElementById('game_end_widget');
 const gameWidgetScore = document.getElementById('game_widget_score');
-const gameSongArtist1 = document.getElementById('game_song_artist_1');
-const gameSongArtist2 = document.getElementById('game_song_artist_2');
-const gameSongArtist3 = document.getElementById('game_song_artist_3');
+const gameSongArtist1 = document.getElementById('soundcloud_card_artist_1');
+const gameSongArtist2 = document.getElementById('soundcloud_card_artist_2');
+const gameSongArtist3 = document.getElementById('soundcloud_card_artist_3');
+
+const gameSongImage1 = document.getElementById('soundcloud_card_image_1');
+const gameSongImage2 = document.getElementById('soundcloud_card_image_2');
+const gameSongImage3 = document.getElementById('soundcloud_card_image_3');
+
+const gameSongTitle1 = document.getElementById('soundcloud_card_title_1');
+const gameSongTitle2 = document.getElementById('soundcloud_card_title_2');
+const gameSongTitle3 = document.getElementById('soundcloud_card_title_3');
 
 const gameSongScore1 = document.getElementById('game_song_score_1');
 const gameSongScore2 = document.getElementById('game_song_score_2');
 const gameSongScore3 = document.getElementById('game_song_score_3');
-
-const gameSongTitle1 = document.getElementById('game_song_title_1');
-const gameSongTitle2 = document.getElementById('game_song_title_2');
-const gameSongTitle3 = document.getElementById('game_song_title_3');
 
 const gameSongBar1 = document.getElementById('game_song_bar_1');
 const gameSongBar2 = document.getElementById('game_song_bar_2');
@@ -543,6 +547,7 @@ function resetGameState(){
 
     accuracyBonus.classList.add('hidden');
 
+
     //show song details
     widgetTitle.classList.add('hidden');
     roundSongArtist.classList.add('hidden');
@@ -565,7 +570,6 @@ function resetGameState(){
 
     mainAlbumCover.classList.add("opacity-0");
     mainAlbumCover.classList.add("duration-1000");
-
 
     nextRoundButtonContainer.classList.add('hidden');
 
@@ -1263,6 +1267,10 @@ function showGameEndWidget(json){
     gameSongTitle2.innerText = json['songs'][1]['title'];
     gameSongTitle3.innerText = json['songs'][2]['title'];
 
+    gameSongImage1.src = json['songs'][0]['albumCover'];
+    gameSongImage2.src = json['songs'][1]['albumCover'];
+    gameSongImage3.src = json['songs'][2]['albumCover'];
+
     gameSongBar1.style.width = ((json['scores'][0] / 3000) * 100) + "%";
     gameSongBar2.style.width = ((json['scores'][1] / 3000) * 100) + "%";
     gameSongBar3.style.width = ((json['scores'][2] / 3000) * 100) + "%";
@@ -1274,26 +1282,26 @@ function showGameEndWidget(json){
 }
 
 
-// const dummyData = {
-//     anotherRound: false,
-//     correctArtist: "Natalie Imbruglia",
-//     correctGuess: true,
-//     correctTitle: "Torn",
-//     guessCount: 1,
-//     roundEnd: true,
-//     score: 3000,
-//     scores: [
-//         967,
-//         920,
-//         3000],
-//     songs:[
-//         {urn: 'soundcloud:tracks:1331242909', title: 'Calm Down', genre: 'Pop', albumCover: 'https://i1.sndcdn.com/artworks-pIPrJaNtVzzV-0-t500x500.jpg', artist: 'Rema'},
-//         {urn: 'soundcloud:tracks:1035123307', title: 'Save Your Tears', genre: 'R & B', albumCover: 'https://i1.sndcdn.com/artworks-yRwygOCUTQui-0-t500x500.jpg', artist: 'The Weeknd'},
-//         {urn: 'soundcloud:tracks:256614041', title: 'Torn', genre: 'Pop', albumCover: 'https://i1.sndcdn.com/artworks-tOpnt8iy33it-0-t500x500.jpg', artist: 'Natalie Imbruglia'}
-//     ],
-//     overallScore: 8744
+const dummyData = {
+    anotherRound: false,
+    correctArtist: "Natalie Imbruglia",
+    correctGuess: true,
+    correctTitle: "Torn",
+    guessCount: 1,
+    roundEnd: true,
+    score: 3000,
+    scores: [
+        967,
+        920,
+        3000],
+    songs:[
+        {urn: 'soundcloud:tracks:1331242909', title: 'Calm Down', genre: 'Pop', albumCover: 'https://i1.sndcdn.com/artworks-pIPrJaNtVzzV-0-t500x500.jpg', artist: 'Rema'},
+        {urn: 'soundcloud:tracks:1035123307', title: 'Save Your Tears', genre: 'R & B', albumCover: 'https://i1.sndcdn.com/artworks-yRwygOCUTQui-0-t500x500.jpg', artist: 'The Weeknd'},
+        {urn: 'soundcloud:tracks:256614041', title: 'Torn', genre: 'Pop', albumCover: 'https://i1.sndcdn.com/artworks-tOpnt8iy33it-0-t500x500.jpg', artist: 'Natalie Imbruglia'}
+    ],
+    overallScore: 8744
 
-// }
+}
 
-// showGameEndWidget(dummyData);
-// showGameUI();
+showGameEndWidget(dummyData);
+showGameUI();
