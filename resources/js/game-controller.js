@@ -40,6 +40,11 @@ const gameSongBar1 = document.getElementById('game_song_bar_1');
 const gameSongBar2 = document.getElementById('game_song_bar_2');
 const gameSongBar3 = document.getElementById('game_song_bar_3');
 
+const soundcloudCardLink1 = document.getElementById('soundcloud_card_link_1');
+const soundcloudCardLink2 = document.getElementById('soundcloud_card_link_2');
+const soundcloudCardLink3 = document.getElementById('soundcloud_card_link_3');
+const unlimitedSoundcloudCardLink= document.getElementById('unlimited_soundcloud_card_link');
+
 const accuracyBonus = document.getElementById('accuracy_bonus');
 
 const playbackButtonsContainer = document.getElementById('playback_button_wrapper')
@@ -1097,6 +1102,7 @@ function unlimitedGuess(guess){
             'correctGuess': userGuess,
             'correctTitle': song['title'],
             'correctArtist': song['artist'],
+            'url': song['url'],
             'score': userGuess ? currentScore : 0
 
         }
@@ -1212,6 +1218,8 @@ function endRound(json){
 
 function showRoundEndWidget(json){
 
+    console.log(json);
+
     stopTimer();
 
     widgetTitle.innerText = json['correctGuess'] ? "Correct!" : "Incorrect";
@@ -1234,7 +1242,7 @@ function showRoundEndWidget(json){
     albumImageContainer.style.filter = "none";
     albumImageContainer.style.height = "max-content";
     albumImageContainer.classList = "relative border-2 border-gray-400 flex justify-between px-3 py-2 px-5 rounded-xl flex gap-2 items-center w-full mt-3 overflow-hidden";
-
+    unlimitedSoundcloudCardLink.href = json['url'];
     soundcloudLogo.classList.remove('hidden');
 
     mainAlbumCover.classList = "absolute -z-10 right-0 duration-1000";
@@ -1270,6 +1278,11 @@ function showGameEndWidget(json){
     gameSongImage1.src = json['songs'][0]['albumCover'];
     gameSongImage2.src = json['songs'][1]['albumCover'];
     gameSongImage3.src = json['songs'][2]['albumCover'];
+
+    soundcloudCardLink1.href = json['songs'][0]['url'];
+    soundcloudCardLink2.href = json['songs'][1]['url'];
+    soundcloudCardLink3.href = json['songs'][2]['url'];
+
 
     gameSongBar1.style.width = ((json['scores'][0] / 3000) * 100) + "%";
     gameSongBar2.style.width = ((json['scores'][1] / 3000) * 100) + "%";

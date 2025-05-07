@@ -73,6 +73,7 @@ class DailyController extends Controller
             'title' => $song->title,
             'artist' => $song->artist,
             'albumCover' => $song->albumCover,
+            'link' => $song->url,
             'songNumber' => session()->get('songNumber'),
             'session' => session()->all()
         ], 200);

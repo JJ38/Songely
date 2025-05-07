@@ -20,6 +20,7 @@ class UnlimitedController extends Controller
 
         return response()->json([
             'urn' => $song->urn,
+            'url' => $song->url,
             'title' => $song->title,
             'artist' => $song->artist,
             'albumCover' => $song->albumCover,
