@@ -61,6 +61,15 @@ class DailyController extends Controller
         //get rid of noise in song title e.g [radio edition]
         $filteredTitle = str_replace(" ", "" , str_replace(strpbrk($song->title, '([-'), "", $song->title));
         $song['filteredTitle'] = $filteredTitle;
+
+        $filteredArtist = str_replace(" ", "" , $song->artist);
+
+        if(strpos($filteredArtist, 'feat.')){
+            $filteredArtist = substr($filteredArtist, 0, strpos($filteredArtist, 'feat.'));
+        }
+
+        $song['filteredArtist'] = $filteredArtist;
+
         session()->push('songs', $song);
 
         session()->increment('songNumber');
@@ -73,6 +82,7 @@ class DailyController extends Controller
 
         return response()->json([
             'fitleredTitle' => $filteredTitle,
+            'filteredArtist' =>  $filteredArtist,
             'urn' => $song->urn,
             'title' => $song->title,
             'artist' => $song->artist,
@@ -93,7 +103,7 @@ class DailyController extends Controller
 
         $correctGuess = true;
 
-        if(!(strtolower($songToGuess['filteredTitle']) == strtolower($guess['title'])) || !(strtolower($songToGuess['artist']) == strtolower($guess['artist']))){
+        if(!(strtolower($songToGuess['filteredTitle']) == strtolower($guess['title'])) || !(strtolower($songToGuess['filteredArtist']) == strtolower($guess['artist']))){
             //incorrect guess
             $correctGuess = false;
         }

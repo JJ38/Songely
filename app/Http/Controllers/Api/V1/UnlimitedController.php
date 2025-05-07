@@ -19,7 +19,6 @@ class UnlimitedController extends Controller
         $song->albumCover = str_replace('-large.', '-t500x500.', $song->albumCover);
         $filteredTitle = str_replace(" ", "" , str_replace(strpbrk($song->title, '(['), "", $song->title));
 
-
         $filteredArtist = str_replace(" ", "" , $song->artist);
 
         if(strpos($filteredArtist, 'feat.')){

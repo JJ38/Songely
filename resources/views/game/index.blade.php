@@ -244,8 +244,8 @@
 
                             <div class="flex flex-col justify-end py-1 backdrop-blur-sm">
 
-                                <p id="round_song_artist" class="text-l text-white text-shadow-lg">Ariana Grande</p>
-                                <p id="round_song_title" class="text-xl/5 font-bold text-white text-shadow-xs">Stuck With U</p>
+                                <p id="round_song_artist" class="text-l text-white text-shadow-lg"></p>
+                                <p id="round_song_title" class="text-xl/5 font-bold text-white text-shadow-xs"></p>
 
                             </div>
 
