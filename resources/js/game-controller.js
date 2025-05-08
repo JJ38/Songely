@@ -1330,7 +1330,7 @@ function showRoundEndWidget(json){
     unlimitedSoundcloudCardLink.href = json['url'];
     soundcloudLogo.classList.remove('hidden');
 
-    mainAlbumCover.classList = "absolute -z-10 right-0 duration-1000";
+    mainAlbumCover.classList = "absolute right-0 duration-1000";
 
     //show next round button
     nextRoundButtonContainer.classList.remove('hidden');
