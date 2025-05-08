@@ -60,6 +60,7 @@ const volumeIcon = document.getElementById('volume_icon');
 
 const sliderButton = document.getElementById('slider_button');
 
+const playbackBarContainer = document.getElementById('playback_bar_container');
 const playedBar = document.getElementById('played_bar');
 const revealedBar = document.getElementById('revealed_bar');
 
@@ -89,7 +90,7 @@ const userSong = document.getElementById('song_number');
 
 const startingBlurAmount = 40; //px
 const lengthOfBlurMilliseconds = 20000;
-const lengthOfSliderBar = 900;
+let lengthOfSliderBar = 900;
 
 const lastFMKey = "aa937b96944a6e3f01b961d9557c641a";
 const autoCompleteDebounce = 1000;
@@ -124,7 +125,6 @@ let guessCount = 0;
 let greatestSongTime = 0;
 
 let soundcloudReady = false;
-let soundcloudInitialised = false;
 
 let soundcloud;
 let soundcloudBackground;
@@ -153,6 +153,12 @@ addEventListeners();
 
 
 function addEventListeners(){
+
+    addEventListener("resize", (event) => {
+
+        lengthOfSliderBar = playbackBarContainer.getBoundingClientRect().width
+
+    });
 
     if(playPauseButton != null){
 
@@ -681,7 +687,6 @@ async function fetchSong(){
 function loadSong(){
 
     initialiseSoundcloud(getIframeURL(song['urn']));
-    soundcloudInitialised = true;
 
 }
 
@@ -1231,6 +1236,8 @@ function incorrectGuess(json){
     //handle incorrect guess
     const livesLeft =  lives - json['guessCount'];
     updateLives(livesLeft);
+    //flash red
+    gameCard.classList.add('');
 
     if(livesLeft == 0){
 

@@ -11,15 +11,15 @@
 
         <h1 class="text-6xl font-bold text-center">Guess the song in the shortest time</h1>
 
-        <div class="mt-20 flex gap-10 justify-center">
+        <div class="mt-20 flex flex-col gap-10 justify-center items-center sm:items-baseline sm:flex-row">
 
-            <div id="ready_button_wrapper">
+            <div id="ready_button_wrapper" class="w-min">
                 <button id="ready_button" class="w-50 text-white text-3xl bg-pink px-6 py-3 rounded-lg hover:bg-pink-300 hover:cursor-pointer duration-200">
                     Daily
                 </button>
             </div>
 
-            <div id="ready_button_wrapper">
+            <div id="ready_button_wrapper" class="w-min">
                 <button id="unlimited_button" class="w-50 text-white text-3xl bg-pink px-6 py-3 rounded-lg hover:bg-pink-300 hover:cursor-pointer duration-200">
                     Unlimited
                 </button>
@@ -207,21 +207,8 @@
 
         </div>
 
-        <div class="flex justify-center">
+        <div class="relative flex-col mx-auto items-center">
 
-            <div class="flex flex-col justify-between items-end mr-5 mt-4 flex-1">
-
-                <div id="song_number_container" class="hidden flex h-min gap-2">
-                    <p>Song:</p>
-                    <p id="song_number">1/3</p>
-                </div>
-
-                <div class="flex h-min mt-auto gap-2">
-                    <p>Score:</p>
-                    <p id="score">3000</p>
-                </div>
-
-            </div>
 
             <div id="game_card" class="py-10 px-10 w-[320px] h-[390px] bg-white rounded-xl border drop-shadow-xl/25 duration-1000">
 
@@ -288,97 +275,125 @@
 
             </div>
 
-            <div class="flex flex-col justify-between ml-5 mt-4 flex-1">
+            <div class="flex justify-between">
 
-                <div class="right-0 top-0 flex">
+                <div class="static bottom-0 sm:absolute flex flex-col justify-between items-end mt-4 sm:h-[390px] sm:top-0 sm:left-0 sm:translate-x-[-100%] sm:pb-4 sm:pr-5">
 
-                    <div id="mute_button_container" class="relative w-8 h-8">
+                    <div id="song_number_container" class="hidden flex h-min gap-2">
 
-                        <svg id="volume_icon" class="absolute w-8 h-8 hover:cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
-                            <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
-                            <path d="M533.6 32.5C598.5 85.2 640 165.8 640 256s-41.5 170.7-106.4 223.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C557.5 398.2 592 331.2 592 256s-34.5-142.2-88.7-186.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM473.1 107c43.2 35.2 70.9 88.9 70.9 149s-27.7 113.8-70.9 149c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C475.3 341.3 496 301.1 496 256s-20.7-85.3-53.2-111.8c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zm-60.5 74.5C434.1 199.1 448 225.9 448 256s-13.9 56.9-35.4 74.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C393.1 284.4 400 271 400 256s-6.9-28.4-17.7-37.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM301.1 34.8C312.6 40 320 51.4 320 64l0 384c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352 64 352c-35.3 0-64-28.7-64-64l0-64c0-35.3 28.7-64 64-64l67.8 0L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3z"/>
-                        </svg>
-
-                        <svg id="mute_icon" class="absolute hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
-                            <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
-                            <path d="M301.1 34.8C312.6 40 320 51.4 320 64l0 384c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352 64 352c-35.3 0-64-28.7-64-64l0-64c0-35.3 28.7-64 64-64l67.8 0L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3zM425 167l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0z"/>
-                        </svg>
+                        <p class="hidden sm:block">Song:</p>
+                        <p class="hidden sm:block" id="song_number">1/3</p>
 
                     </div>
 
-                    <div>
+                    <div class="flex h-min mt-auto gap-2">
+                        <p>Score:</p>
+                        <p id="score">3000</p>
+                    </div>
 
-                        <div class="relative translate-x-[-50%]">
+                </div>
 
-                            <div class="w-8 h-8"></div>
-                            <input id="volume_slider" class="absolute accent-pink rotate-270 translate-x-[-50%] translate-y-[50%] mt-15 mt-5 hover:cursor-pointer" type="range" orient="vertical" min="0" max="100"  step="1">
+                <div class="static sm:absolute flex flex-col justify-between mt-4 sm:h-[390px] sm:top-0 sm:right-0 sm:translate-x-[100%] sm:pb-4 sm:pl-5">
+
+                    <div class="hidden sm:flex right-0 top-0 ">
+
+                        <div id="mute_button_container" class="relative w-8 h-8">
+
+                            <svg id="volume_icon" class="absolute w-8 h-8 hover:cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                                <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                                <path d="M533.6 32.5C598.5 85.2 640 165.8 640 256s-41.5 170.7-106.4 223.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C557.5 398.2 592 331.2 592 256s-34.5-142.2-88.7-186.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM473.1 107c43.2 35.2 70.9 88.9 70.9 149s-27.7 113.8-70.9 149c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C475.3 341.3 496 301.1 496 256s-20.7-85.3-53.2-111.8c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zm-60.5 74.5C434.1 199.1 448 225.9 448 256s-13.9 56.9-35.4 74.5c-10.3 8.4-25.4 6.8-33.8-3.5s-6.8-25.4 3.5-33.8C393.1 284.4 400 271 400 256s-6.9-28.4-17.7-37.3c-10.3-8.4-11.8-23.5-3.5-33.8s23.5-11.8 33.8-3.5zM301.1 34.8C312.6 40 320 51.4 320 64l0 384c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352 64 352c-35.3 0-64-28.7-64-64l0-64c0-35.3 28.7-64 64-64l67.8 0L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3z"/>
+                            </svg>
+
+                            <svg id="mute_icon" class="absolute hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                                <!--!Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.-->
+                                <path d="M301.1 34.8C312.6 40 320 51.4 320 64l0 384c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352 64 352c-35.3 0-64-28.7-64-64l0-64c0-35.3 28.7-64 64-64l67.8 0L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3zM425 167l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0z"/>
+                            </svg>
+
+                        </div>
+
+                        <div>
+
+                            <div class="relative translate-x-[-50%]">
+
+                                <div class="w-8 h-8"></div>
+                                <input id="volume_slider" class="absolute accent-pink rotate-270 translate-x-[-50%] translate-y-[50%] mt-15 mt-5 hover:cursor-pointer" type="range" orient="vertical" min="0" max="100"  step="1">
+
+                            </div>
 
                         </div>
 
                     </div>
 
-                </div>
+                    <div class="flex h-min mt-auto gap-2">
+                        <p>Lives:</p>
+                        <p id="lives">3/3</p>
+                    </div>
 
-                <div class="flex h-min mt-auto gap-2">
-                    <p>Lives:</p>
-                    <p id="lives">3/3</p>
                 </div>
 
             </div>
 
         </div>
 
-        <div class="relative mt-18 h-[1px] w-[900px] mx-auto">
+        <div class="mx-5">
 
-            <div class="bg-pink h-[5px] w-[900px] absolute"></div>
-            <div id="revealed_bar" class="bg-gray-300 h-[5px] w-[0px] absolute"></div>
-            <div id="played_bar" class="bg-gray-600 h-[5px] w-[0px] absolute"></div>
+            <div id="playback_bar_container" class="relative mt-18 h-[1px] max-w-[900px] w-full mx-auto">
 
-            <x-circle-button id="slider_button" class="w-[27px] h-[27px] top-[2px] bg-white translate-x-[-50%] translate-y-[-50%] absolute hover:w-[32px] hover:h-[32px] hover:cursor-pointer" style="left: 0px"></x-circle-button>
+                <div class="bg-pink h-[5px] max-w-[900px] w-full absolute mr-1"></div>
+                <div id="revealed_bar" class="bg-gray-300 h-[5px] w-[0px] absolute"></div>
+                <div id="played_bar" class="bg-gray-600 h-[5px] w-[0px] absolute"></div>
 
-        </div>
-
-        <div class="relative flex flex-col mx-auto w-[1000px] mt-auto mb-8">
-
-            <div id="autocomplete_container" class="absolute bottom-full bg-white text-xl border border-b-0 w-full z-10 hidden">
-
-                <div id="autocomplete_results" class="hidden">
-
-                </div>
-
-                <div id="placeholder_autocomplete_inputs" class="hover:cursor-progress hidden">
-
-                    <x-suggested-song-placeholder>w</x-suggested-song-placeholder>
-                    <x-suggested-song-placeholder>w</x-suggested-song-placeholder>
-                    <x-suggested-song-placeholder>w</x-suggested-song-placeholder>
-                    <x-suggested-song-placeholder>w</x-suggested-song-placeholder>
-                    <x-suggested-song-placeholder>w</x-suggested-song-placeholder>
-                    <x-suggested-song-placeholder>w</x-suggested-song-placeholder>
-                    <x-suggested-song-placeholder>w</x-suggested-song-placeholder>
-                    <x-suggested-song-placeholder>w</x-suggested-song-placeholder>
-
-
-                </div>
-
-                <div id="loader_container" class="absolute w-full flex justify-center top-[50%] translate-y-[-50%] hidden">
-
-                    <svg aria-hidden="true" class="inline w-16 h-16 text-gray-200 animate-spin dark:text-gray-600 fill-pink" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
-                        <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
-                    </svg>
-
-                </div>
-
+                <x-circle-button id="slider_button" class="w-[27px] h-[27px] top-[2px] bg-white translate-x-[-50%] translate-y-[-50%] absolute hover:w-[32px] hover:h-[32px] hover:cursor-pointer" style="left: 0px"></x-circle-button>
 
             </div>
 
-            <input id="guess_input" class="bg-white h-[60px] w-full border px-5 text-xl" placeholder="Guess a song" type="text" />
+        </div>
 
-            <div class="mx-auto mt-4">
+        <div class="flex justify-center flex-1">
 
-                <button id="guess_button" class="text-white text-2xl bg-pink px-6 py-3 rounded-lg w-min hover:bg-pink-300 hover:cursor-pointer duration-200">
-                    Guess
-                </button>
+            <div class="relative flex flex-col mt-auto mb-8 flex-1 max-w-[1000px] mx-1">
+
+                <div id="autocomplete_container" class="absolute bottom-full bg-white text-xl border border-b-0 w-full z-10 hidden">
+
+                    <div id="autocomplete_results" class="hidden">
+
+                    </div>
+
+                    <div id="placeholder_autocomplete_inputs" class="hover:cursor-progress hidden">
+
+                        <x-suggested-song-placeholder>w</x-suggested-song-placeholder>
+                        <x-suggested-song-placeholder>w</x-suggested-song-placeholder>
+                        <x-suggested-song-placeholder>w</x-suggested-song-placeholder>
+                        <x-suggested-song-placeholder>w</x-suggested-song-placeholder>
+                        <x-suggested-song-placeholder>w</x-suggested-song-placeholder>
+                        <x-suggested-song-placeholder>w</x-suggested-song-placeholder>
+                        <x-suggested-song-placeholder>w</x-suggested-song-placeholder>
+                        <x-suggested-song-placeholder>w</x-suggested-song-placeholder>
+
+
+                    </div>
+
+                    <div id="loader_container" class="absolute w-full flex justify-center top-[50%] translate-y-[-50%] hidden">
+
+                        <svg aria-hidden="true" class="inline w-16 h-16 text-gray-200 animate-spin dark:text-gray-600 fill-pink" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                        </svg>
+
+                    </div>
+
+
+                </div>
+
+                <input id="guess_input" class="bg-white h-[60px] border px-5 text-xl" placeholder="Guess a song" type="text" />
+
+                <div class="mx-auto mt-4">
+
+                    <button id="guess_button" class="text-white text-2xl bg-pink px-6 py-3 rounded-lg w-min hover:bg-pink-300 hover:cursor-pointer duration-200">
+                        Guess
+                    </button>
+                </div>
+
             </div>
 
         </div>
