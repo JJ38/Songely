@@ -73,7 +73,7 @@
                         <div id="soundcloud_card_1" class="relative border-2 border-gray-400 flex justify-between px-3 py-2 px-5 rounded-xl flex gap-2 items-center w-full mt-3 overflow-hidden">
 
                             <img id="soundcloud_card_image_1" src="" class="absolute left-0 -z-10 duration-1000"
-                                alt="{{ Vite::asset('resources/images/album_cover_placeholder.png') }}"
+
                             >
 
                             <div class="flex flex-col justify-end py-1 backdrop-blur-sm">
@@ -123,7 +123,7 @@
                         <div id="soundcloud_card_2" class="relative border-2 border-gray-400 flex justify-between px-3 py-2 px-5 rounded-xl flex gap-2 items-center w-full mt-3 overflow-hidden">
 
                             <img id="soundcloud_card_image_2" src="" class="absolute left-0 -z-10 duration-1000"
-                                alt="{{ Vite::asset('resources/images/album_cover_placeholder.png') }}"
+
                             >
 
                             <div class="flex flex-col justify-end py-1 backdrop-blur-sm">
@@ -174,7 +174,7 @@
                         <div id="soundcloud_card_3" class="relative border-2 border-gray-400 flex justify-between px-3 py-2 px-5 rounded-xl flex gap-2 items-center w-full mt-3 overflow-hidden">
 
                             <img id="soundcloud_card_image_3" src="" class="absolute left-0 -z-10 duration-1000"
-                                alt="{{ Vite::asset('resources/images/album_cover_placeholder.png') }}"
+
                             >
 
                             <div class="flex flex-col justify-end py-1 backdrop-blur-sm">
@@ -226,7 +226,7 @@
                         <div id="album_image_container" class="h-[220px] overflow-hidden rounded-xl blur-[40px]">
 
                             <img id="main_album_cover" src="" class="opacity-0 duration-1000"
-                            alt="{{ Vite::asset('resources/images/album_cover_placeholder.png') }}"
+
                             >
 
                             <div class="flex flex-col justify-end py-1 backdrop-blur-sm">
@@ -403,13 +403,13 @@
 
         <div class="absolute left-0 top-0 blur-[300px] translate-x-[-90%] translate-y-[-50%] -z-10">
             <img id="left_album_cover" class="w-175 opacity-0 duration-1000" src=""
-            alt="{{ Vite::asset('resources/images/album_cover_placeholder.png') }}"
+
             >
         </div>
 
         <div class="absolute right-0 bottom-0 blur-[300px] translate-x-[90%] translate-y-[50%] -z-10">
             <img id="right_album_cover" class="w-175 h-175 opacity-0 duration-1000" src=""
-            alt="{{ Vite::asset('resources/images/album_cover_placeholder.png') }}"
+
             >
         </div>
 
