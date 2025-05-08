@@ -76,6 +76,7 @@ const mainAlbumCover = document.getElementById('main_album_cover');
 const leftAlbumCover = document.getElementById('left_album_cover');
 const rightAlbumCover = document.getElementById('right_album_cover');
 
+const guessInputContainer = document.getElementById('guess_input_container');
 const guessInput = document.getElementById('guess_input');
 const autoCompleteContainer = document.getElementById('autocomplete_container');
 const autocompleteResults = document.getElementById('autocomplete_results');
@@ -1148,6 +1149,7 @@ function unlimitedGuess(guess){
     if(!(song['filteredTitle'].toLowerCase() == guess['title'].toLowerCase()) || !(song['filteredArtist'].toLowerCase() == guess['artist'].toLowerCase())){
         //incorrect guess
         userGuess = false;
+        flashRed();
 
     }
 
@@ -1237,7 +1239,8 @@ function incorrectGuess(json){
     const livesLeft =  lives - json['guessCount'];
     updateLives(livesLeft);
     //flash red
-    gameCard.classList.add('');
+
+    flashRed();
 
     if(livesLeft == 0){
 
@@ -1245,6 +1248,30 @@ function incorrectGuess(json){
         endRound(json);
 
     }
+
+}
+
+
+function flashRed(){
+
+    console.log('flash red');
+
+
+    guessInput.classList.remove('duration-2000');
+    guessInputContainer.classList.remove('duration-2000');
+    guessInput.classList.add('border-red-500');
+    guessInputContainer.classList.remove('opacity-0');
+
+
+    setTimeout(() => {
+
+        guessInput.classList.add('duration-2000');
+        guessInput.classList.remove('border-red-500');
+
+        guessInputContainer.classList.add('duration-2000');
+        guessInputContainer.classList.add('opacity-0');
+
+    }, 10);
 
 }
 

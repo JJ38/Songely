@@ -385,7 +385,10 @@
 
                 </div>
 
-                <input id="guess_input" class="bg-white h-[60px] border px-5 text-xl" placeholder="Guess a song" type="text" />
+                <div class="relative p-[1px]">
+                    <input id="guess_input" class="w-full bg-white h-[60px] border px-5 text-xl" placeholder="Guess a song" type="text" />
+                    <div id="guess_input_container" class="absolute w-full h-full top-0 left-0 border border-red-500 opacity-0 -z-10"></div>
+                </div>
 
                 <div class="mx-auto mt-4">
 
