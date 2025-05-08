@@ -443,7 +443,7 @@ async function startGame(){
 async function startDailyGame(){
 
 
-    await fetch("http://" + window.location.host + "/sanctum/csrf-cookie",{
+    await fetch(location.protocol + "//" + window.location.host + "/sanctum/csrf-cookie",{
 
         method: "GET",
         headers: {
@@ -455,7 +455,7 @@ async function startDailyGame(){
 
     const xsrf = Cookies.get('XSRF-TOKEN');
 
-    const response = await fetch('http://' + window.location.host + '/api/v1/daily/startgame',{
+    const response = await fetch(location.protocol + '//' + window.location.host + '/api/v1/daily/startgame',{
 
         method: "POST",
         headers: {
@@ -644,11 +644,11 @@ async function fetchSong(){
 
     if(gamemode == gameMode.DAILY){
 
-        url = 'http://' + window.location.host + '/api/v1/daily/getsong';
+        url = location.protocol + '//' + window.location.host + '/api/v1/daily/getsong';
 
     }else{
 
-        url = 'http://' + window.location.host + '/api/v1/unlimited/getsong';
+        url = location.protocol + '//' + window.location.host + '/api/v1/unlimited/getsong';
 
     }
 
@@ -1109,7 +1109,7 @@ async function dailyGuess(guess){
     guess['title'] = filterTitle(guess['title']);
     guess['artist'] = filterArtist(guess['artist']);
 
-    const url = 'http://' + window.location.host + '/api/v1/daily/guess';
+    const url = location.protocol + '//' + window.location.host + '/api/v1/daily/guess';
     const xsrf = Cookies.get('XSRF-TOKEN');
 
     const response = await fetch(url,{
