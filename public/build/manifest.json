@@ -4,10 +4,44 @@
     "src": "resources/css/app.css",
     "isEntry": true
   },
+  "resources/images/album_cover_placeholder.png": {
+    "file": "assets/album_cover_placeholder-Cq70SJAu.png",
+    "src": "resources/images/album_cover_placeholder.png"
+  },
+  "resources/images/play_arrow.svg": {
+    "file": "assets/play_arrow-Cf-asCPn.svg",
+    "src": "resources/images/play_arrow.svg"
+  },
+  "resources/images/replay.svg": {
+    "file": "assets/replay-BQj6CJkc.svg",
+    "src": "resources/images/replay.svg"
+  },
+  "resources/images/skip_previous.svg": {
+    "file": "assets/skip_previous-DRG41THV.svg",
+    "src": "resources/images/skip_previous.svg"
+  },
+  "resources/images/soundcloud_logo.png": {
+    "file": "assets/soundcloud_logo-DyZXyElk.png",
+    "src": "resources/images/soundcloud_logo.png"
+  },
+  "resources/images/vinyl_record.svg": {
+    "file": "assets/vinyl_record-DWys2oQY.svg",
+    "src": "resources/images/vinyl_record.svg"
+  },
+  "resources/images/vinyl_record_svg.svg": {
+    "file": "assets/vinyl_record_svg-BRXyLpVq.svg",
+    "src": "resources/images/vinyl_record_svg.svg"
+  },
   "resources/js/app.js": {
     "file": "assets/app-DZrhHQtG.js",
     "name": "app",
     "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/js/game-controller.js": {
+    "file": "assets/game-controller-BCudAwuB.js",
+    "name": "game-controller",
+    "src": "resources/js/game-controller.js",
     "isEntry": true
   }
 }
