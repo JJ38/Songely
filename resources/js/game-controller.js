@@ -1310,7 +1310,7 @@ function showRoundEndWidget(json){
     widgetTitle.innerText = json['correctGuess'] ? "Correct!" : "Incorrect";
     roundSongTitle.innerText = json['correctTitle'];
     roundSongArtist.innerText = json['correctArtist'];
-    roundSongScore.innerText = "You guessed the song in " + ((songLengthMs/1000) - (json['score']/100)).toFixed(2) + "s";
+    roundSongScore.innerText = json['correctGuess'] ? "You guessed the song in " + ((songLengthMs/1000) - (json['score']/100)).toFixed(2) + "s" : "You failed to gues the song";
 
     //show song details
     widgetTitle.classList.remove('hidden');
