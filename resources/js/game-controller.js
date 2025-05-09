@@ -174,7 +174,7 @@ function addEventListeners(){
 
         if (event.code === 'Space') {
 
-            userPausePlayInput()
+            userPausePlayInput();
 
         }
 

@@ -29,7 +29,7 @@ class DailyController extends Controller
         $uniqueID = false;
         $songID = 0;
 
-        $numberOfSongs = 346;
+        $numberOfSongs = env('NUMBER_OF_SONGS');
         $salt = "ouijasdrfhguasdrfoiphu" . session()->get('songNumber');
         $hashInput = session()->get('date') . $salt;
 
