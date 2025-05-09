@@ -133,7 +133,7 @@ let lastGuessInputEpoch = 0;
 
 let autocompleteGuess;
 
-const referer = "songely-master-q64rbs";
+const referer = "songely";
 
 const playbackState = {
 
