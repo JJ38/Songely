@@ -172,9 +172,15 @@ function addEventListeners(){
 
     document.addEventListener('keyup', event => {
 
-        if (event.code === 'Space') {
+        if (event.code === 'Space' && document.activeElement != guessInput) {
 
             userPausePlayInput();
+
+        }
+
+        if (event.code === 'Enter') {
+
+
 
         }
 
