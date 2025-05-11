@@ -18,22 +18,27 @@
     <title>Songely</title>
 
 </head>
-<body class="flex flex-col bg-lightgray font-hanken-grotesk min-h-screen overflow-hidden">
-    <nav class="flex justify-between pt-3 px-2 mb-3 sm:mb-0 sm:px-12 sm:pt-7">
+<body class="bg-lightgray font-hanken-grotesk min-h-screen">
+    <div class="overflow-hidden flex flex-col min-h-screen">
 
-        <div class="flex">
-            <x-button id="home_button" class="hidden">Home</x-button>
-        </div>
+        <nav class="flex justify-between pt-3 px-2 mb-3 sm:mb-0 sm:px-12 sm:pt-7">
 
-        {{-- <div class="flex gap-7">
-            <x-button href="/register">Register</x-button>
-            <x-button href="/login">Log In</x-button>
-        </div> --}}
+            <div class="flex">
+                <x-button id="home_button" class="hidden">Home</x-button>
+            </div>
 
-    </nav>
-    <main class="flex flex-col flex-1">
-        {{ $slot }}
-    </main>
+            {{-- <div class="flex gap-7">
+                <x-button href="/register">Register</x-button>
+                <x-button href="/login">Log In</x-button>
+            </div> --}}
+
+        </nav>
+        <main class="flex flex-col flex-1">
+            {{ $slot }}
+        </main>
+
+    </div>
+
 
 </body>
 </html>
